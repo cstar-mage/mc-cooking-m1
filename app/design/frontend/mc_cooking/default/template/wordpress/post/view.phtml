@@ -1,0 +1,43 @@
+<?php
+/**
+ * @category    Fishpig
+ * @package     Fishpig_Wordpress
+ * @license     http://fishpig.co.uk/license.txt
+ * @author      Ben Tideswell <help@fishpig.co.uk>
+ */
+?>
+
+<?php $post = $this->getPost() ?>
+<?php if ($post): ?>
+	<?php $helper = $this->helper('wordpress') ?>
+	<?php $author = $post->getAuthor() ?>
+	<br>
+    <div class="post-view">
+        <?php echo $this->getBeforePostContentHtml() ?>
+        <div class="post-entry entry std<?php if ($post->getFeaturedImage()): ?> post-entry-with-image<?php endif; ?>">
+            <?php if ($post->isViewableForVisitor()): ?>
+                <?php if ($featuredImage = $post->getFeaturedImage()): ?>
+                    <div class="relative-container">
+                        <div class="featured-image banner">
+                            <img class="img-responsive" src="<?php echo $featuredImage->getFullSizeImage() ?>" alt="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"/>
+                        </div>
+                        <div class="page-title post-title">
+                            <p><span><?php echo $this->escapeHtml($post->getPostTitle()) ?></span></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <div class="container">
+                <p class="post-date when"><?php echo stripslashes($this->__('This tip was posted on %s.', $post->getPostDate())); ?></p>
+                <?php echo $post->getPostContent() ?>
+            <?php else: ?>
+                <?php echo $this->getPasswordProtectHtml() ?>
+            <?php endif; ?>
+        </div>
+        <div class="container">
+            <?php echo $this->getAfterPostContentHtml() ?>
+            <?php echo $this->getCommentsHtml() ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,17 @@
+{{template config_path="design/email/header"}}
+{{inlinecss file="email-inline.css"}}
+
+<p>Thank you for signing up for our class at Main Course Cooking school. We are excited to have you join us, and hope you will come prepared to have some fun.</p>
+<p>We have your reservation for {{var data.getQtyOrdered()}} for class: {{var data.getName()}} on {{var data.getFormattedReleaseDate()}}</p>
+<p>Our address is 18750 I-45 #600, Spring, TX 77373.</p>
+<p>This is a cooking and dining experience. You will enjoy the fruits of your labor and eat the meal / dishes you make. Classes start promptly and last 2.5 to 3 hours. Please be there 15-20 minutes early, where you can stop by the front desk to check in electronically.</p>
+<p>In this hands-on class, you will work directly with raw product to create your own meal, cooking in teams of 2 to 4 students in our kitchens, or outdoor cooking on The Big Green Egg™. Please dress comfortably and wear non-slip shoes. Aprons and hats will be provided for you. Our goal is for you to leave the class having had a great experience, a sense of accomplishment and equipped with recipes for recreating the menu at home.</p>
+<p>Non-alcoholic beverages are included in the price of the class. If you did not upgrade your experience by adding beer or wine during registration, in-class purchases will be available during the class. While you may not bring any outside alcoholic beverage, you may purchase from us before the class begins.</p>
+<p>Main Course Cooking School is located inside of MainStreet America.</p>
+<p>To see your order or place a new one, <a href="{{store url="customer/account/index"}}"> view your account details </a>.</p>
+<p><a href="https://www.google.com/maps/dir//18750+I-45,+Spring,+TX+77373/@30.0392231,-95.4295485,17z/data=!4m16!1m7!3m6!1s0x8640cad108521b03:0xe74973d5befbf2d2!2s18750+I-45,+Spring,+TX+77373!3b1!8m2!3d30.0392231!4d-95.4273598!4m7!1m0!1m5!1m1!1s0x8640cad108521b03:0xe74973d5befbf2d2!2m2!1d-95.4273598!2d30.0392231">View a Map</a></p>
+<p> <strong>CLASS CANCELLATION POLICY</strong><br>
+    A refund will be issued for tickets purchased for any class up to seven (7) days prior to the class date. An exchange or class transfer will be made for tickets purchased for any class if requested more than 48 hours before the class date. Cancellations and transfer requests must be sent by email only to info@mccooking.com. No refunds or exchanges will be given for cancellations made less than 48 hours prior to the class date.
+</p>
+
+{{template config_path="design/email/footer"}}

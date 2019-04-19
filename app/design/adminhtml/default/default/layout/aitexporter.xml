@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <adminhtml_aitexporter_import_index>
+        <reference name="head">
+            <action method="addJs"><name>aitexporter/import.js</name></action>
+            <action method="addJs"><name>aitexporter/processor.js</name></action>
+        </reference>
+    </adminhtml_aitexporter_import_index>
+    
+    <adminhtml_aitexporter_export_index>
+        <reference name="head">
+            <action method="addJs"><name>aitexporter/processor.js</name></action>
+<action method="addJs"><name>aitexporter/validateCustomDate.js</name></action>
+        </reference>
+    </adminhtml_aitexporter_export_index>
+</layout>
+<!--
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+-->

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <BroSolutions_GoogleRecaptcha>
+            <version>0.0.1</version>
+        </BroSolutions_GoogleRecaptcha>
+    </modules>
+    <global>
+        <helpers>
+            <bsgooglerecaptcha>
+                <class>BroSolutions_GoogleRecaptcha_Helper</class>
+            </bsgooglerecaptcha>
+        </helpers>
+    </global>
+    <frontend>
+        <routers>
+            <contacts>
+                <args>
+                    <modules>
+                        <BroSolutions_GoogleRecaptcha before="Mage_Contacts">BroSolutions_GoogleRecaptcha</BroSolutions_GoogleRecaptcha>
+                    </modules>
+                </args>
+            </contacts>
+        </routers>
+    </frontend>
+</config>

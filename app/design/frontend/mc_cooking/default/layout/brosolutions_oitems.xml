@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<layout>
+    <last_ordered_classes>
+        <block type="oitems/order_email_items" name="items" template="email/order/classes.phtml">
+        </block>
+    </last_ordered_classes>
+</layout>

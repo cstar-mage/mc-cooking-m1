@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <msa module="msa_square">
+            <label>MSA</label>
+            <sort_order>400</sort_order>
+        </msa>
+    </tabs>
+    <sections>
+        <msa translate="label" module="msa_square">
+            <label>Square Synchronization</label>
+            <tab>msa</tab>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <square_settings translate="label">
+                    <label>Square API Settings</label>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <square_api_location translate="label">
+                            <label>Square API Location ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </square_api_location>
+                        <square_api_token translate="label">
+                            <label>Square API Token</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </square_api_token>
+                    </fields>
+                </square_settings>
+            </groups>
+        </msa>
+    </sections>
+</config>

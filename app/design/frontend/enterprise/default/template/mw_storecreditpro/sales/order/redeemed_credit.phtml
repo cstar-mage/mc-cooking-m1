@@ -1,0 +1,22 @@
+
+<?php
+
+ $_order  = $this->getOrder();
+ $_source = $this->getSource();
+
+ $store_id = Mage::getModel('sales/order')->load($_order->getId())->getStoreId();
+ $credit_dicount_show = $_order->getMwStorecreditDiscountShow();
+
+ if ($credit_dicount_show > 0){ 
+ $value  = - $credit_dicount_show;
+ if($_source instanceof Mage_Sales_Model_Order_Creditmemo) $value =  - $value;
+	?>
+<tr>
+    <td <?php echo $this->getLabelProperties()?>>
+        <?php echo Mage::helper('storecreditpro')->__('You Redeemed'); ?>
+    </td>
+    <td <?php echo $this->getValueProperties()?>><?php echo $_order->formatPrice($value) ?></td>
+</tr>
+<?php };
+?>
+

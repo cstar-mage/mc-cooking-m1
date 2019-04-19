@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_catalog_product_fastclone>
+        <reference name="content">
+            <block type="brosolutionsall/adminhtml_catalog_product_fastclone" name="product_fastclone" />
+        </reference>
+    </adminhtml_catalog_product_fastclone>
+</layout>

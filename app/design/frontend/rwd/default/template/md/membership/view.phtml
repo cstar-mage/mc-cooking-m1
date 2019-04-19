@@ -1,0 +1,210 @@
+<?php
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+$helper = Mage::helper('md_membership');
+$plan = $this->getMembershipPlan();
+$additionalLabel = ($plan->getIsLimited()) ? ' - '.$plan->getTotalOccurences().' time(s).': '';
+//$planDescription = Mage::getModel('cms/template_filter')->filter($plan->getDescription());
+?>
+<div class="product-view">
+    <div class="product-essential">
+        <form method="post" name="membership_plan" id="membership_plan" action="<?php echo $helper->getMembershipPlanAddUrl($plan) ?>">
+            <?php echo $this->getBlockHtml('formkey') ?>
+            <input type="hidden" name="<?php echo Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED ?>" value="<?php echo Mage::helper('core')
+                ->urlEncode(Mage::helper('core/url')->getCurrentUrl()) ?>" />
+            <input type="hidden" name="plan" value="<?php echo $plan->getId() ?>" />
+            <div class="product-img-box">
+                <div class="product-name">
+                    <h1><?php echo $plan->getTitle() ?></h1>
+                </div>
+                <div class="plan-image plan-image-zoom">
+                    <div class="plan-image-gallery">
+                        <img src="<?php echo $plan->getImageUrl(567,567); ?>" id="image-main" class="gallery-image visible img-responsive" alt="<?php echo $plan->getTitle() ?>" title="<?php echo $plan->getTitle() ?>"/>
+                    </div>
+                </div>
+            </div>
+            <div class="product-shop">
+                <div class="product-name">
+                    <span class="h1"><?php echo str_replace('Chefs', 'Chef\'s', $plan->getTitle()); ?></span>
+                </div>
+                <div class="price-info">
+                    <div class="price-box">
+                        <div class="regular-price">
+                            <span class="price"><?php echo Mage::helper('core')->currency($plan->getAmount(),true,false) ?></span>
+                        </div>
+                    </div>
+                </div>
+<style>table td, table th { padding: 0 0 10px; } .bullets { list-style: disc; margin-left: 20px; }</style>
+                <table id="plan-attribute-specs-table" class="clearfix">
+                    <col width="25%"></col>
+                    <col />
+                    <tbody>
+                        <?php if($plan->getInitialAmount() > 0): ?>
+                        <tr>
+                            <th class=""><?php echo $helper->__('Initial Fee') ?></th>
+                            <td class="data"><?php echo Mage::helper('core')->currency($plan->getInitialAmount(),true,false) ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <tr>
+                            <th class=""><?php echo $helper->__('Subscription Amount') ?></th>
+                            <td class="data"><?php echo Mage::helper('core')->currency($plan->getAmount(),true,false) ?></td>
+                        </tr>
+                        <tr>
+                            <th class=""><?php echo $helper->__('Billing Period') ?></th>
+                            <td class="data"><?php echo $helper->getSubscriptionPlanLabel($plan->getBillingPeriod()).$additionalLabel ?></td>
+                        </tr>
+                        <?php if($plan->getTrialPeriodCount() > 0): ?>
+                        <tr>
+                            <th class=""><?php echo $helper->__('Trial Periods') ?></th>
+                            <td class="data"><?php echo $plan->getTrialPeriodCount() ?></td>
+                        </tr>
+                        <tr>
+                            <th class=""><?php echo $helper->__('Trial Period Amount') ?></th>
+                            <td class="data"><?php echo Mage::helper('core')->currency($plan->getTrialAmount(),true,false) ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if($plan->getProfileStartDate()): ?>
+                        <tr>
+                            <th class=""><?php echo $helper->__('Subscription Start Date') ?></th>
+                            <td class="data"><?php echo Mage::helper('core')->formatDate($plan->getProfileStartDate(),'medium') ?></td>
+                        </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+                <div class="product-options">
+                    <?php if($plan->getStartDateDefined() == MD_Membership_Model_Plans::DEFINED_BY_CUSTOMER): ?>
+                    <dl>
+                        <dt>
+                            <label><?php echo $helper->__('Subscription Start Date') ?><em>*</em></label>
+                        </dt>
+                        <dd style="border: none;">
+                            <div class="input-box">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="90%">
+                                           <input readonly="readonly" type="text" class="input-text required-entry" name="membership[subscription_start_date]" id="membership-subscription-start-date" />
+                                        </td>
+                                        <td width="10%" style="vertical-align: top;">
+                                           <img width="30px" src="<?php echo $this->getSkinUrl('md/membership/grid-cal.gif') ?>" alt="<?php echo $helper->__('Subscription Start Date') ?>" class="" id="membership-subscription-start-date-img" /> 
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </dd>
+                    </dl>
+                    <?php echo $this->getChildHtml('calendar') ?>
+                    <script type="text/javascript">
+                    //<![CDATA[
+                    
+                        Calendar.setup({
+                            inputField: "membership-subscription-start-date",
+                            ifFormat: "%m/%e/%Y",
+                            showsTime: false,
+                            button: "membership-subscription-start-date-img",
+                            align: "Bl",
+                            singleClick : true,
+                            disableFunc: function(date){
+                                var now= new Date();
+                                    if(date.getFullYear()<now.getFullYear())
+                                    {
+                                        return true;
+                                    }
+                                    if(date.getFullYear()==now.getFullYear())
+                                    {
+                                        if(date.getMonth()<now.getMonth())
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                    if(date.getMonth()==now.getMonth() && date.getFullYear()== now.getFullYear())
+                                    {
+                                        if(date.getDate()<now.getDate())
+                                        {
+                                            return true;
+                                        }
+                                    }
+                            }
+                        });
+                    //]]>
+                    </script>
+                    <?php endif; ?>
+                    <div class="product-options-bottom">
+                        <div class="add-to-cart">
+                            <div class="add-to-cart-buttons">
+                                <button type="submit" class="button" title="<?php echo $helper->__('Buy Membership Plan') ?>"><span><span><?php echo $helper->__('Buy Membership Plan') ?></span></span></button><br />
+                                <?php if($this->getTermsConditionText()): ?>
+                                <a class="link-tip" href="javascript::void(0);" id="membership-terms-link-popup" title="<?php echo $helper->__('Terms and Conditions') ?>"><?php echo $helper->__('Terms and Conditions') ?></a>
+                                <div id="membership-terms-popup" class="membership-terms-popup" style="display:none;">
+                                    <a href="javascript::void(0);" class="membership-terms-popup-close" id="membership-terms-popup-close">&times;</a>
+                                    <div class="membership-terms-popup-heading">
+                                        <h3><?php echo $this->__('Terms And Conditions') ?></h3>
+                                    </div>
+                                    <div class="membership-terms-popup-content">
+                                        <?php echo nl2br($this->getTermsConditionText()) ?>
+                                    </div>
+                                </div>
+                                <style type="text/css">
+                                    .membership-terms-popup{background: #FFFFFF;border: 5px solid #cccccc;margin: 12px 0 0;position: absolute;text-align: left;width: 550px;z-index: 100;}
+                                    .membership-terms-popup .membership-terms-popup-close{display: block;position: absolute;top: 0px;right: 0px;height: 36px;width: 36px;font-size: 20px;line-height: 32px;text-align: center;}
+                                    .membership-terms-popup .membership-terms-popup-heading{padding: 8px 10px;margin-right: 40px;width: auto;}
+                                    .membership-terms-popup .membership-terms-popup-heading h3{font-size: 14px;margin: 0;overflow: hidden;white-space: nowrap;word-wrap: break-word;text-align: left;text-overflow: ellipsis;}
+                                    .membership-terms-popup .membership-terms-popup-content{border-top: 1px solid #ededed;padding: 10px;margin: 0 10px;overflow: hidden;text-align: left;overflow: auto;height: 305px;}
+                                </style>    
+                                <script type="text/javascript">
+                                    Event.observe(window, 'load', function() {
+                                        Event.observe('membership-terms-link-popup','click',function(){
+                                            if($('membership-terms-popup').getStyle('display') == 'none'){
+                                                $('membership-terms-popup').setStyle({display:'block'});
+                                            }else{
+                                                $('membership-terms-popup').setStyle({display:'none'});
+                                            }
+                                        });
+                                        Event.observe('membership-terms-popup-close','click',function(){
+                                            $('membership-terms-popup').hide();
+                                        });
+                                    });
+                                </script>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <script type="text/javascript">
+                    var membershipPlan = new VarienForm('membership_plan');
+                    decorateTable('plan-attribute-specs-table')
+                                    </script>
+            </div>
+        </form>
+
+        <h2><?php echo $this->__('Membership Plan Description') ?></h2>
+        <ul>
+            <li>
+                <?php echo $this->getContentDescription() ?>
+            </li>
+        </ul>
+    </div>
+</div>

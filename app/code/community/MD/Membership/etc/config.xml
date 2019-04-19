@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+-->
+<config>
+    <modules>
+        <MD_Membership>
+            <version>1.0.0</version>
+        </MD_Membership>
+    </modules>
+    <adminhtml>
+        <layout>
+            <updates>
+                <md_membership>
+                    <file>md_membership.xml</file>
+                </md_membership>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <MD_Membership>
+                    <files>
+                        <default>MD_Membership.csv</default>
+                    </files>
+                </MD_Membership>
+            </modules>
+        </translate>
+        <events>
+            <core_block_abstract_prepare_layout_after>
+                <observers>
+                    <add_subscription_tab_customers>
+                        <type>singleton</type>
+                        <class>md_membership/observer</class>
+                        <method>addSubscriptionTab</method>
+                    </add_subscription_tab_customers>
+                </observers>
+            </core_block_abstract_prepare_layout_after>
+        </events>
+    </adminhtml>
+    <frontend>
+        <layout>
+            <updates>
+                <md_membership>
+                    <file>md_membership.xml</file>
+                </md_membership>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <MD_Membership>
+                    <files>
+                        <default>MD_Membership.csv</default>
+                    </files>
+                </MD_Membership>
+            </modules>
+        </translate>
+        <routers>
+            <md_membership>
+                <use>standard</use>
+                <args>
+                    <module>MD_Membership</module>
+                    <frontName>md_membership</frontName>
+                </args>
+            </md_membership>
+        </routers>
+        <events>
+            <page_block_html_topmenu_gethtml_before>
+                <observers>
+                    <append_membership_link_to_menu>
+                        <type>singleton</type>
+                        <class>md_membership/observer</class>
+                        <method>addLinkToNavigation</method>
+                    </append_membership_link_to_menu>
+                </observers>
+            </page_block_html_topmenu_gethtml_before>
+            <controller_action_predispatch>
+                <observers>
+                    <check_subscriber_storeview>
+                        <type>singleton</type>
+                        <class>md_membership/observer</class>
+                        <method>checkSubscriberStoreview</method>
+                    </check_subscriber_storeview>
+                </observers>
+            </controller_action_predispatch>
+        </events>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mdmembership after="Mage_Adminhtml">MD_Membership_Adminhtml</mdmembership>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <global>
+        <md_membership_validator>
+            <allowed>
+                <payment>
+                    <methods>
+                       <paypal_express />
+                       <authorizenet />
+                    </methods>
+                </payment>
+            </allowed>
+        </md_membership_validator>
+        <helpers>
+            <md_membership>
+                <class>MD_Membership_Helper</class>
+            </md_membership>
+        </helpers>
+        <blocks>
+            <md_membership>
+                <class>MD_Membership_Block</class>
+            </md_membership>
+        </blocks>
+        <models>
+            <md_membership>
+                <class>MD_Membership_Model</class>
+                <resourceModel>md_membership_mysql4</resourceModel>
+            </md_membership>
+            <md_membership_mysql4>
+                <class>MD_Membership_Model_Mysql4</class> 
+                <entities>
+                    <plans>
+                        <table>md_membership_subscription_plans</table>
+                    </plans>
+                    <subscribers>
+                        <table>md_membership_subscription_subscribers</table>
+                    </subscribers>
+                    <increments>
+                        <table>md_membership_subscription_store_increments</table>
+                    </increments>
+                    <payments>
+                        <table>md_membership_subscription_payments</table>
+                    </payments>
+                </entities>
+            </md_membership_mysql4>
+        </models>
+        <resources>
+            <md_membership_setup>
+                <setup>
+                    <module>MD_Membership</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </md_membership_setup>
+            <md_membership_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </md_membership_read>
+            <md_membership_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </md_membership_write>
+        </resources>
+        <events>
+            <controller_front_init_routers>
+                <observers>
+                    <md_membership>
+                        <type>singleton</type>
+                        <class>MD_Membership_Controller_Router</class>
+                        <method>initControllerRouters</method>
+                    </md_membership>
+                </observers>
+            </controller_front_init_routers>
+            <md_membership_paypal_express_response>
+                <observers>
+                    <insert_subscribers_summary>
+                        <type>singleton</type>
+                        <class>md_membership/observer</class>
+                        <method>insertSummary</method>
+                    </insert_subscribers_summary>
+                </observers>
+            </md_membership_paypal_express_response>
+            <authorize_relay_response_received>
+                <observers>
+                    <insert_subscribers_summary>
+                        <type>singleton</type>
+                        <class>md_membership/observer</class>
+                        <method>insertAuthorizeSummary</method>
+                    </insert_subscribers_summary>
+                </observers>
+            </authorize_relay_response_received>
+            <controller_action_layout_render_before>
+                <observers>
+                    <md_membership_check_valid>
+                        <type>model</type>
+                        <class>MD_Membership_Helper_Util</class>
+                        <method>checkValid</method>
+                    </md_membership_check_valid>
+                </observers>
+            </controller_action_layout_render_before>
+        </events>
+        <template>
+            <email>
+                <md_membership_email_subscription_create translate="label" module="md_membership">
+                    <label>Membership Subscription Created Email</label>
+                     <file>md/membership/subscription_created.html</file>
+                     <type>html</type>
+                </md_membership_email_subscription_create>
+                <md_membership_email_subscription_status translate="label" module="md_membership">
+                    <label>Membership Subscription Updated Email</label>
+                     <file>md/membership/subscription_updated.html</file>
+                     <type>html</type>
+                </md_membership_email_subscription_status>
+                <md_membership_email_payment_status translate="label" module="md_membership">
+                    <label>Membership Subscription Payment Status Email</label>
+                     <file>md/membership/subscription_payment_status.html</file>
+                     <type>html</type>
+                </md_membership_email_payment_status>
+            </email>
+        </template>
+    </global>
+    <default>
+        <md_membership>
+            <general>
+                <enable>1</enable>
+            </general>
+            <membership_list>
+                <link_section>top_links</link_section>
+                <page_layout>one_column</page_layout>
+                <link_title>Membership</link_title>
+                <heading_title>Membership Plans</heading_title>
+                <url_key>membership</url_key>
+                <url_suffix>.html</url_suffix>
+            </membership_list>
+            
+        </md_membership>
+    </default>
+    <crontab>
+        <jobs>
+            <md_membership_fetch_data>
+                <schedule>
+                    <cron_expr>0 11,23 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>md_membership/observer::fetchSubscriptionData</model>
+                </run>
+            </md_membership_fetch_data>
+        </jobs>
+    </crontab>
+</config>

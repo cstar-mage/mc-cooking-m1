@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <bsgooglerecaptcha translate="label" module="bsgooglerecaptcha">
+            <label>Google recaptcha</label>
+            <sort_order>300</sort_order>
+        </bsgooglerecaptcha>
+    </tabs>
+    <sections>
+        <bsgooglerecaptchasection translate="label" module="bsgooglerecaptcha">
+            <label>Google recaptcha settings</label>
+            <tab>bsgooglerecaptcha</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>99999</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general>
+                    <label>Google recaptcha settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <websitekey translate="label">
+                            <frontend_type>text</frontend_type>
+                            <label>Website key</label>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </websitekey>
+                        <secretkey translate="label">
+                            <frontend_type>text</frontend_type>
+                            <label>Secret Key</label>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </secretkey>
+
+                    </fields>
+                </general>
+            </groups>
+        </bsgooglerecaptchasection>
+    </sections>
+</config>

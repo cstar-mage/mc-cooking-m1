@@ -1,0 +1,19 @@
+<?php $clearUrl = $this->getClearUrl();?>
+<?php $months = $this->getAvailableMonths(); ?>
+<?php $currentMonth = $this->getMonth(); ?>
+<?php if(count($months)): ?>
+    <ul class="months-toolbar">
+        <?php $inc = 0; ?>
+        <?php foreach($months as $month): ?>
+            <?php $monthIsNotCurrent = ($currentMonth != $month);?>
+            <?php if($monthIsNotCurrent):?>
+                <a href="<?php echo $this->getFilterMonthUrl($month); ?>" <?php if($inc == 0): ?> data-direction="prev" <?php else: ?> data-direction="next" <?php endif; ?>>
+            <?php endif; ?>
+                <li><?php echo $this->getMonthNameByNum($month); ?> <?php if(!$monthIsNotCurrent): echo $this->getYearForToolbar();  endif; ?></li>
+            <?php if($monthIsNotCurrent):?>
+                </a>
+            <?php endif; ?>
+            <?php $inc ++; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

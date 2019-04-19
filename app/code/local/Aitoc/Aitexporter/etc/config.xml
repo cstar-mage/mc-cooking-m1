@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Aitoc_Aitexporter>
+            <version>1.2.11</version>
+        </Aitoc_Aitexporter>
+    </modules>
+
+    <global>
+        <models>
+            <aitexporter>
+                <class>Aitoc_Aitexporter_Model</class>
+                <resourceModel>aitexporter_mysql4</resourceModel>
+            </aitexporter>
+            
+            <aitcheckoutfields>
+                <rewrite>
+                    <aitcheckoutfields>Aitoc_Aitexporter_Model_Rewrite_Aitcheckoutfields</aitcheckoutfields>
+                </rewrite>
+            </aitcheckoutfields>
+            
+            <sales_mysql4>
+                <rewrite>
+                    <order>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4Order</order>
+					<order_shipment>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderShipment</order_shipment>
+					<order_shipment_comment>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderShipmentComment</order_shipment_comment>
+					<order_invoice>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderInvoice</order_invoice>
+					<order_invoice_comment>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderInvoiceComment</order_invoice_comment>
+					<order_creditmemo>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderCreditmemo</order_creditmemo>
+					<order_creditmemo_comment>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderCreditmemoComment</order_creditmemo_comment>
+					<order_status_history>Aitoc_Aitexporter_Model_Rewrite_SalesModelMysql4OrderStatusHistory</order_status_history>
+                </rewrite>
+            </sales_mysql4>
+
+            <aitexporter_mysql4>
+                <class>Aitoc_Aitexporter_Model_Mysql4</class>
+                <entities>
+                    <export>
+                        <table>aitexporter_export</table>
+                    </export>
+                    <export_order>
+                        <table>aitexporter_export_order</table>
+                    </export_order>
+                    <import>
+                        <table>aitexporter_import</table>
+                    </import>
+                    <import_error>
+                        <table>aitexporter_import_error</table>
+                    </import_error>
+                    <profile>
+                        <table>aitexporter_profile</table>
+                    </profile>
+                </entities>
+            </aitexporter_mysql4>
+        </models>
+
+        <blocks>
+            <aitexporter>
+                <class>Aitoc_Aitexporter_Block</class>
+            </aitexporter>
+        </blocks>
+
+        <helpers>
+            <aitexporter><class>Aitoc_Aitexporter_Helper</class></aitexporter>
+        </helpers>
+
+		<resources>
+			<aitexporter_setup>
+				<setup>
+ 				   <module>Aitoc_Aitexporter</module>
+				</setup>
+				<connection>
+				    <use>core_setup</use>
+				</connection>
+			</aitexporter_setup>
+			<aitexporter_write>
+				<connection>
+				    <use>core_write</use>
+				</connection>
+			</aitexporter_write>
+			<aitexporter_read>
+				<connection>
+				    <use>core_read</use>
+				</connection>
+			</aitexporter_read>
+		</resources>
+
+        <events>
+            <aitexporter_import_replace_order>
+        	    <observers>
+            	    <deleteOrderItemsGiftMessages>
+                	    <type>singleton</type>
+                	    <class>aitexporter/import_type_order_item</class>
+                	    <method>deleteGiftMessages</method>
+            	    </deleteOrderItemsGiftMessages>
+                    <deleteAitcheckoutfields>
+                        <type>singleton</type>
+                        <class>aitexporter/import_type_aitcheckoutfields</class>
+                        <method>deleteAitcheckoutfields</method>
+                    </deleteAitcheckoutfields>
+        	    </observers>
+            </aitexporter_import_replace_order>
+            <aitexporter_import_order_save_after>
+                <observers>
+                    <postProcessAitcheckoutfields>
+                        <type>singleton</type>
+                        <class>aitexporter/import_type_aitcheckoutfields</class>
+                        <method>postProcess</method>
+                    </postProcessAitcheckoutfields>
+                </observers>
+            </aitexporter_import_order_save_after>
+            <sales_order_save_commit_after>
+                <observers>
+                    <exportOrderAfterPlace>
+                        <type>singleton</type>
+                        <class>aitexporter/observer</class>
+                        <method>exportOrderAfterPlace</method>
+                    </exportOrderAfterPlace>
+                </observers>
+            </sales_order_save_commit_after>
+            <sales_order_save_after>
+                <observers>
+                    <exportOrderAfterPlace>
+                        <type>singleton</type>
+                        <class>aitexporter/observer</class>
+                        <method>exportOrderAfterPlace</method>
+                    </exportOrderAfterPlace>
+                </observers>
+            </sales_order_save_after>
+            <controller_action_postdispatch_paypal_express_placeOrder>
+                <observers>
+                    <exportOrderAfterPlace>
+                        <type>singleton</type>
+                        <class>aitexporter/observer</class>
+                        <method>onControllerActionPostdispatch</method>
+                    </exportOrderAfterPlace>
+                </observers>
+            </controller_action_postdispatch_paypal_express_placeOrder>
+            <controller_action_postdispatch_checkout>
+                <observers>
+                    <exportOrderAfterPlace>
+                        <type>singleton</type>
+                        <class>aitexporter/observer</class>
+                        <method>onControllerActionPostdispatch</method>
+                    </exportOrderAfterPlace>
+                </observers>
+            </controller_action_postdispatch_checkout>
+            <aitcheckoutfields_aitexporter>
+                <observers>
+                    <exportOrderAfterPlace>
+                        <type>singleton</type>
+                        <class>aitexporter/observer</class>
+                        <method>exportOrderAfterPlace</method>
+                    </exportOrderAfterPlace>
+                </observers>
+            </aitcheckoutfields_aitexporter>
+            <sales_order_invoice_save_after>
+                <observers>
+                    <exportOrderAfterInvoice>
+                        <type>singleton</type>
+                        <class>aitexporter/observer</class>
+                        <method>exportOrderAfterInvoice</method>
+                    </exportOrderAfterInvoice>
+                </observers>
+            </sales_order_invoice_save_after>
+        </events>
+        <template>
+            <email>
+                <aitexporter_template translate="label" module="aitexporter">
+                    <label>Aitexporter: Export Orders</label>
+                    <file>aitexporter_export.html</file>
+                    <type>html</type>
+                </aitexporter_template>
+            </email>
+        </template>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <aitoc_aitexporter after="Mage_Adminhtml">Aitoc_Aitexporter_Adminhtml</aitoc_aitexporter>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+             <updates>
+                  <aitexporter>
+                        <file>aitexporter.xml</file>
+                  </aitexporter>
+             </updates>
+        </layout>
+        
+        <translate>
+            <modules>
+                <Aitoc_Aitexporter>
+                    <files>
+                        <default>Aitoc_Aitexporter.csv</default> 
+                    </files>
+                </Aitoc_Aitexporter>
+            </modules>
+        </translate>
+
+        <menu>
+            <system>
+                <children>
+                    <convert>
+                        <children>
+                            <aitexporter_import translate="title" module="aitexporter">
+                                <title>Aitoc Order Import</title>
+                                <action>adminhtml/aitexporter_import/index</action>
+                            </aitexporter_import>
+                            <aitexporter_export translate="title" module="aitexporter">
+                                <title>Aitoc Order Export</title>
+                                <action>adminhtml/aitexporter_export/index</action>
+                            </aitexporter_export>
+                        </children>
+                    </convert>
+                </children>
+            </system>
+        </menu>
+        
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <convert>
+                                    <children>
+                                        <aitexporter_import>
+                                            <title>Aitoc Order Import</title>
+                                        </aitexporter_import>
+                                        <aitexporter_export>
+                                            <title>Aitoc Order Export</title>
+                                        </aitexporter_export>
+                                    </children>
+                                </convert>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <crontab>
+        <jobs>
+            <aitexporter_export_orders>
+                <schedule><cron_expr>*/3 * * * *</cron_expr></schedule>
+                <run><model>aitexporter/observer::cronExport</model></run>
+            </aitexporter_export_orders>
+            <aitexporter_processor>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
+                <run><model>aitexporter/processor::run</model></run>
+            </aitexporter_processor>
+        </jobs> 
+    </crontab>
+
+    <frontend>
+    </frontend>
+
+    <aitexporter>
+        <import>
+            <order>
+                <order_item />
+                <order_address />
+                <order_payment>
+                    <order_payment_transaction />
+                </order_payment>
+                <order_statushistory />
+                <invoice>
+                    <invoice_item />
+                    <invoice_comment />
+                </invoice>
+                <shipment>
+                    <shipment_item />
+                    <shipment_comment />
+                    <shipment_track />
+                </shipment>
+                <creditmemo>
+                    <creditmemo_item />
+                    <creditmemo_comment />
+                </creditmemo>
+                <aitcheckoutfields />
+            </order>
+        </import>
+        <csv>
+            <item>items</item>
+            <tracking>trackings</tracking>
+            <address>addresses</address>
+            <payment>payments</payment>
+            <transaction>transactions</transaction>
+            <statushistory>statuseshistory</statushistory>
+            <invoice>invoices</invoice>
+            <invoice_comment>invoice_comments</invoice_comment>
+            <invoice_item>invoice_items</invoice_item>
+            <creditmemo>creditmemos</creditmemo>
+            <creditmemo_comment>creditmemo_comments</creditmemo_comment>
+            <creditmemo_item>creditmemo_items</creditmemo_item>
+            <shipment>shipments</shipment>
+            <shipment_comment>shipment_comments</shipment_comment>
+            <shipment_item>shipment_items</shipment_item>
+            <shipment_tracking>trackings</shipment_tracking>
+        </csv>
+    </aitexporter>
+
+    <default>
+        <sales>
+            <aitexporter>
+                <export>a:2:{s:4:"file";a:3:{s:4:"type";s:4:"file";s:8:"filename";s:16:"order_export.xml";s:4:"path";s:10:"var/export";}s:5:"parse";a:3:{s:4:"type";s:3:"xml";s:9:"delimiter";s:1:",";s:7:"enclose";s:1:""";}}</export>
+                <import>a:1:{s:5:"parse";a:3:{s:4:"type";s:3:"xml";s:9:"delimiter";s:1:",";s:7:"enclose";s:1:""";}}</import>
+                <tmp_dir>/var/aitexporter_tmp/</tmp_dir>
+            </aitexporter>
+        </sales>
+    </default>
+</config>
+<!--
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+-->

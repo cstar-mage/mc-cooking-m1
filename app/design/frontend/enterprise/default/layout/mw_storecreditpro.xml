@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    
+    <customer_account translate="label">        
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="storecreditpro" ifconfig="storecreditpro/config/enabled"><name>storecreditpro</name><path>storecreditpro/</path><label>My Credits</label></action>
+        </reference>
+    </customer_account>
+    
+    <storecreditpro_index_index>
+		<update handle="customer_account"/>
+        <reference name="content">
+        	<block type="core/template" name="customer_storecredit_dashboard" template="mw_storecreditpro/customer/account/credit.phtml">
+	              <block type="storecreditpro/storecredit" name="customer_storecredit_info" as="storecredit_info" template="mw_storecreditpro/customer/account/credit/info.phtml"/>
+				  <block type="storecreditpro/storecredit_transaction" name="customer_storecredit_transaction" as="storecredit_transaction" template="mw_storecreditpro/customer/account/credit/transaction.phtml"/>
+	              <block type="core/template" name="customer_storecredit_send" as="storecredit_send" template="mw_storecreditpro/customer/account/credit/send.phtml"/>
+	        	 <!--  <block type="storecreditpro/storecredit" name="customer_storecredit_email" as="storecredit_email" template="mw_storecreditpro/customer/account/credit/email.phtml"/> -->
+	        </block>
+        </reference>
+    </storecreditpro_index_index>
+    
+    <checkout_cart_index>
+    	<reference name="checkout.cart">
+    		<block type="storecreditpro/storecredit" name="checkout.cart.extra" as="checkout.cart.extra" template="mw_storecreditpro/checkout/cart/credit.phtml"  />
+    	</reference>
+    </checkout_cart_index>
+    
+    <storecreditpro_checkout_cart_onepagepost>
+    	<reference name="root">
+    		<action method="setTemplate"><template>mw_storecreditpro/page/empty.phtml</template></action>
+    	</reference>
+	    <reference name="content">
+		    <block type="checkout/onepage_payment_methods" name="checkout.payment.methods" as="methods" template="mw_storecreditpro/checkout/onepage/payment/methods.phtml">
+		    </block>
+		</reference>
+    </storecreditpro_checkout_cart_onepagepost>
+    
+    <storecreditpro_checkout_cart_updateformcredit>
+	    <reference name="root">
+	    		<action method="setTemplate"><template>mw_storecreditpro/page/empty.phtml</template></action>
+    	</reference>
+	    <reference name="content">
+		    <block type="storecreditpro/storecredit" name="checkout.cart.extra" as="checkout.cart.extra" template="mw_storecreditpro/checkout/onepage/credit.phtml"  />
+		</reference>
+    </storecreditpro_checkout_cart_updateformcredit>
+    
+    <sales_order_view>
+        <reference name="order_totals">
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_order_view>
+    
+    <sales_order_print>
+        <reference name="order_totals">
+            <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_order_print>
+    
+    <sales_email_order_items>
+        <reference name="order_totals">
+           <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_email_order_items>
+
+    <sales_order_invoice>
+        <reference name="invoice_totals">
+            <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_order_invoice>
+    
+    <sales_order_printinvoice>
+        <reference name="invoice_totals">
+            <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_order_printinvoice>
+    
+    <sales_email_order_invoice_items>
+        <reference name="invoice_totals">
+           <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_email_order_invoice_items>
+
+    <sales_order_creditmemo>
+        <reference name="creditmemo_totals">
+            <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_order_creditmemo>
+    
+    <sales_order_printcreditmemo>
+        <reference name="creditmemo_totals">
+            <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_order_printcreditmemo>
+    
+    <sales_email_order_creditmemo_items>
+        <reference name="creditmemo_totals">
+            <block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.buy.credit" template="mw_storecreditpro/sales/order/buy_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>first</value></action>
+        	</block>
+        	<block type="storecreditpro/sales_order_total" name="mw.storecredit.sales.order.redeemed.credit" template="mw_storecreditpro/sales/order/redeemed_credit.phtml" after="-">
+        		<action method="setAfterTotal"><value>discount</value></action>
+        	</block>
+        </reference>
+    </sales_email_order_creditmemo_items>
+    
+</layout> 

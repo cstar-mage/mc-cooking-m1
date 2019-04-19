@@ -1,0 +1,33 @@
+<?php
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+if ($this->haveActiveProcess()) { ?>
+    <div id="ait_processor_indicator">
+        <h4><?php echo Mage::helper('aitexporter')->__('Current process');?>: <span id="ait_process_title"><?php echo $this->getProcessName(); ?></span></h4>
+        <div style="width:502px;height:30px;border:1px solid #666E73;position:relative;margin-bottom:8px;">
+            <div style="width:<?php echo $this->getPercent(); ?>%;height:30px;background:#D7DFDF;position:absolute;top:0px;left:0px;"></div>
+            <div  style="width:500px;height:28px;line-height:30px;position:absolute;top:0px;left:0px;text-align:center;border:1px solid white;""><?php echo $this->getPercent(); ?>%</div>
+        </div>
+        <div id="ait_estimated_time">
+            <?php echo Mage::helper('aitexporter')->__('Estimated time of current process');?>: <span><?php echo Mage::helper('aitexporter')->__('estimation');?></span><span>...</span>
+        </div>
+    </div>
+    <?php if(!$this->isAjax()) { ?>
+        <script type="text/javascript">
+        //<![CDATA[
+            var processor = new aitexporterProcessor('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/aitexporter_processor/run', array('iterator' => Aitoc_Aitexporter_Model_Processor::ITERATOR_AJAX)); ?>');
+        //]]>
+        </script>
+    <?php } ?>
+<?php }else{ ?>
+    <div id="ait_processor_indicator">
+        <?php echo Mage::helper('aitexporter')->__('There\'s no active export/import process'); ?>
+    </div>
+<?php } ?>

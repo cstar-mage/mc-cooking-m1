@@ -1,0 +1,20 @@
+<?php
+/**
+ * block type="core/template"
+ */
+?>
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <h4 class="heading">STAY IN THE LOOP</h4>
+    Keep up to date on our latest classes, events and more.<br>
+    <form id="newsletter-validate-detail" method="post" action="<?php echo $this->getFormActionUrl() ?>">
+        <div class="input-group">
+            <input type="text" class="form-control required-entry validate-email" placeholder="Email Address" aria-describedby="basic-addon2" name="email">
+            <span class="input-group-addon" id="basic-addon2" onclick="newsletterSubscriberFormDetail.submit();">signup</span>
+        </div>
+    </form>
+    <script type="text/javascript">
+        //<![CDATA[
+        var newsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail');
+        //]]>
+    </script>
+</div>

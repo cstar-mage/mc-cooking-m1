@@ -1,0 +1,257 @@
+<?php
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+
+$helper = Mage::helper('md_membership');
+$coreHelper = Mage::helper('core');
+$subscriber = $this->getSubscriber();
+$summary = $subscriber->getPaymentSummary();
+$plan = $this->getPlan();
+$customer = $subscriber->getCustomer();
+$payment = $helper->getPaymentArray();
+?>
+<div class="content-header">
+    <h3 class="icon-head head-sales-order"><?php echo $this->getTitle() ?></h3>
+    <p class="form-buttons">
+        <button title="<?php echo $this->__('Back') ?>" type="button" class="scalable back" onclick="setLocation('<?php echo $this->getUrl('*/*/index') ?>')" style=""><span><span><span><?php echo $this->__('Back') ?></span></span></span></button>
+        <?php echo $this->getCancelButtonHtml() ?>
+        <?php echo $this->getActivateButtonHtml() ?>
+        <?php echo $this->getSuspendButtonHtml() ?>
+    </p>
+</div>
+<div class="entry-edit">
+    <div id="membership_subscribers_view">
+        <div class="box-left">
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-account"><?php echo $helper->__('Membership Plan Information') ?></h4>
+                    <div class="tools">
+                        <a href="<?php echo $this->getUrl('adminhtml/mdmembership_index/edit',array('id'=>$this->getPlan()->getId())) ?>" title="<?php echo $helper->__('View') ?>" target="_blank"><?php echo $helper->__('View') ?></a>
+                    </div>
+                </div>
+                <div class="fieldset">
+                    <table cellpadding="0" class="form-list">
+                        <tbody>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Plan Name') ?></td>
+                                <td class="value"><strong><?php echo $plan->getTitle() ?></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Plan Price') ?></td>
+                                <td class="value"><strong><?php echo $coreHelper->formatPrice($plan->getAmount(),true,false) ?></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Billing Period') ?></td>
+                                <td class="value"><strong><?php echo $helper->getSubscriptionPlanLabel($plan->getBillingPeriod()) ?></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Billing Cycles') ?></td>
+                                <td class="value"><strong><?php echo $plan->getTotalOccurences() ?></strong></td>
+                            </tr>
+                            <?php if($plan->getTrialPeriodCount() > 0): ?>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Trial Price') ?></td>
+                                <td class="value"><strong><?php echo $coreHelper->formatPrice($plan->getTrialAmount(),true,false) ?></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Trial Cycles') ?></td>
+                                <td class="value"><strong><?php echo $plan->getTrialPeriodCount() ?></strong></td>
+                            </tr>
+                            <?php endif; ?>
+                            <?php if($plan->getInitialAmount() > 0): ?>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Initial Price') ?></td>
+                                <td class="value"><strong><?php echo $coreHelper->formatPrice($plan->getInitialAmount(),true,false) ?></strong></td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="box-right">
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-account"><?php echo $helper->__('Customer Information') ?></h4>
+                    
+                </div>
+                <div class="fieldset">
+                    <table cellpadding="0" class="form-list">
+                        <tbody>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Customer Name') ?></td>
+                                <td class="value">
+                                    <a href="<?php echo $this->getUrl('adminhtml/customer/edit',array('id'=>$subscriber->getCustomerId())) ?>" title="<?php echo $customer->getName() ?>" target="_blank"><strong><?php echo $customer->getName() ?></strong></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Email') ?></td>
+                                <td class="value">
+                                    <a href="mailto:<?php echo $customer->getEmail() ?>" title="<?php echo $customer->getEmail() ?>"><strong><?php echo $customer->getEmail() ?></strong></a>
+                                </td>                            
+                            </tr>
+                            <!--<tr>
+                                <td class="label"><?php echo $helper->__('Customer Group') ?></td>
+                                <td class="value"><strong><?php echo $customer->getGroupId() ?></strong></td>
+                            </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="box-left">
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-account"><?php echo $helper->__('Payment Information') ?></h4>
+                </div>
+                <div class="fieldset">
+                    <table cellpadding="0" class="form-list">
+                            <?php if($subscriber->getCustomerAddressId()): ?>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Billing Information') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $customer->getAddressById($subscriber->getCustomerAddressId())->format('html') ?>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                            <tr>
+                                <td class="label"><?php echo $helper->__('Payment Method') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $payment[$subscriber->getPaymentMethod()] ?>
+                                    </strong>
+                                </td>                            
+                            </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="box-right">
+            <div class="entry-edit-head">
+                    <h4 class="icon-head head-account"><?php echo $helper->__('Subscription Summary') ?></h4>
+                </div>
+                <div class="order-totals">
+                    <table cellspacing="0" width="100%">
+                        <tr>
+                                <td class="label"><?php echo $helper->__('Started On') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $coreHelper->formatDate($subscriber->getProfileStartDate(),'medium') ?>
+                                    </strong>
+                                </td>
+                        </tr>
+                        <?php if($subscriber->getLastPaymentDate()): ?>
+                        <tr>
+                                <td class="label"><?php echo $helper->__('Last Payment On') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $coreHelper->formatDate($subscriber->getLastPaymentDate(),'medium') ?>
+                                    </strong>
+                                </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if($subscriber->getNextBillingDate()): ?>
+                        <tr>
+                                <td class="label"><?php echo $helper->__('Next Payment On') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $coreHelper->formatDate($subscriber->getNextBillingDate(),'medium') ?>
+                                    </strong>
+                                </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if($subscriber->getBillingCyclesCompleted()): ?>
+                        <tr>
+                                <td class="label"><?php echo $helper->__('Billing Cycles Completed') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $subscriber->getBillingCyclesCompleted() ?>
+                                    </strong>
+                                </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if($subscriber->getBillingCyclesRemains()): ?>
+                        <tr>
+                                <td class="label"><?php echo $helper->__('Billing Cycles Due') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $subscriber->getBillingCyclesRemains() ?>
+                                    </strong>
+                                </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if($subscriber->getPaymentFailedCount()): ?>
+                        <tr>
+                                <td class="label"><?php echo $helper->__('Billing Cycles Due') ?></td>
+                                <td class="value">
+                                    <strong>
+                                        <?php echo $subscriber->getPaymentFailedCount() ?>
+                                    </strong>
+                                </td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
+<?php if($summary): ?>
+<div class="clear"></div>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-products"><?php echo $helper->__('Payment Summary') ?></h4>
+    </div>
+</div>
+<div class="grid np">
+    <div class="hor-scroll">
+        <table cellspacing="0" class="data order-tables">
+            <col />
+            <!--<col />-->
+            <col width="1" />
+            <thead>
+                <tr class="headings">
+                    <th><?php echo $helper->__('Payment Date') ?></th>
+                    <th><?php echo $helper->__('Paid Amount') ?></th>
+                    <!--<th><?php echo $helper->__('Status') ?></th>-->
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($summary as $_summary): ?>
+                <tr>
+                    <td><?php echo $coreHelper->formatDate($_summary->getLastPayment(),'medium') ?></td>
+                    <td><?php echo $coreHelper->currencyByStore($_summary->getLastPaidAmount(),$subscriber->getStoreId(),true,false); ?></td>
+                    <!--<td></td>-->
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php endif; ?>

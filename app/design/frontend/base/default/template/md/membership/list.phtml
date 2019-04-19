@@ -1,0 +1,106 @@
+<?php
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+    $helper = Mage::helper('md_membership');
+    $plans = $this->getLoadedMembershipPlans();
+?>
+<div class="page-title membership-title">
+    <h1><?php echo $helper->getMembershipLinkHeading() ?></h1>
+</div>
+
+<?php if(!$plans->count()): ?>
+    <p class="note-msg"><?php echo $this->__('There are no membership plans available.') ?></p>
+    <?php else: ?>
+    <div class="membership-plans">
+        <?php echo $this->getToolbarHtml() ?>
+        <?php // List mode ?>
+        <?php if($this->getMode()!='grid'): ?>
+            <?php $_iterator = 0; ?>
+            <ol class="products-list" id="membership-list">
+                <?php foreach ($plans as $_plan): ?>
+                    <li class="item<?php if( ++$_iterator == sizeof($plans) ): ?> last<?php endif; ?>">
+                    <?php // Product Image ?>
+                    <a href="<?php echo $_plan->getPlanUrl() ?>" title="<?php echo $_plan->getTitle() ?>" class="product-image">                
+                        <?php $_imgSize = 135; ?>
+                        <img src="<?php echo $_plan->getImageUrl(135,135); ?>" alt="<?php echo $_plan->getTitle() ?>" width="135" height="135" />
+                    </a>
+                    <?php // Product description ?>
+                    <div class="product-shop">
+                        <div class="f-fix">
+                            <?php $_productNameStripped = $this->stripTags($_plan->getTitle(), null, true); ?>
+                            <h2 class="product-name"><a href="<?php echo $_plan->getPlanUrl() ?>" title="<?php echo $_productNameStripped; ?>"><?php echo $_productNameStripped; ?></a></h2>                                            
+                            <div class="price-box">
+                                <div class="regular-price">
+                                    <span class="price"><?php echo Mage::helper('core')->currency($_plan->getAmount(),true,false) ?></span>
+                                </div>
+                            </div>
+                            <p><a title="<?php echo $this->__('View Details') ?>" href="<?php echo $_plan->getPlanUrl() ?>"><button type="button" title="<?php echo $this->__('View Details') ?>" class="button btn-cart" ><span><span><?php echo $this->__('View Details') ?></span></span></button></a></p>
+                        </div>
+                    </div>
+                </li>
+                <?php endforeach; ?>
+        </ol>
+        <script type="text/javascript">decorateList('membership-list', 'none-recursive')</script>
+
+        <?php else: ?>
+
+        <?php // Grid Mode ?>
+
+        <?php $_collectionSize = $plans->count() ?>
+        <?php $_columnCount = $this->getColumnCount(); ?>
+        <ul class="products-grid">
+            <?php $i=0; foreach ($plans as $_plan): ?>
+                <?php /*if ($i++%$_columnCount==0): ?>
+                <?php endif*/ ?>
+                <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+                <a href="<?php echo $_plan->getPlanUrl() ?>" title="<?php echo $_plan->getTitle() ?>" class="product-image">
+                    <?php $_imgSize = 135; ?>
+                    <img  src="<?php echo $_plan->getImageUrl(135,135); ?>" alt="<?php echo $_plan->getTitle() ?>" width="135" height="135" />
+                </a>
+                <!--<div class="product-info">-->
+                <h2 class="product-name"><a href="<?php echo $_plan->getPlanUrl() ?>" title="<?php echo $_plan->getTitle() ?>"><?php echo $_plan->getTitle() ?></a></h2>
+                <div class="price-box">
+                    <div class="regular-price">
+                        <span class="price"><?php echo Mage::helper('core')->currency($_plan->getAmount(),true,false) ?></span>
+                    </div>
+                </div>
+                <div class="actions">
+                    <a title="<?php echo $this->__('View Details') ?>" href="<?php echo $_plan->getPlanUrl() ?>"><button type="button" title="<?php echo $this->__('View Details') ?>" class="button btn-cart"><span><span><?php echo $this->__('View Details') ?></span></span></button></a>                        
+                </div>
+                <!--</div>-->
+            </li>
+            <?php /*if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+            <?php endif*/ ?>
+            <?php endforeach ?>
+    </ul>
+    <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+    <?php endif; ?>
+
+    <div class="toolbar-bottom">
+        <?php echo $this->getToolbarHtml() ?>
+    </div>
+    </div>
+    <?php endif; ?>

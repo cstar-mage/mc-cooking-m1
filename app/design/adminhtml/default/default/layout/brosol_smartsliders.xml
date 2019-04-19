@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_smartslides_slidesgroups>
+        <reference name="content">
+            <block type="smartslides/adminhtml_smartslidesgroups" name="smartslidesgroups"/>
+        </reference>
+    </adminhtml_smartslides_slidesgroups>
+    <!--adminhtml_smartslides_editslidersgroup>
+        <reference name="content">
+            <block type="smartslides/adminhtml_smartslidesgroups_edit" name="smartslidesgroups_edit_main" />
+        </reference>
+        <reference name="left">
+            <block type="smartslides/adminhtml_smartslidesgroups_edit_tabs" name="smartslidesgroups_edit_tab_form">
+                <block type="smartslides/adminhtml_smartslidesgroups_edit_tab_form" name="smartslidesgroups_edit" />
+            </block>
+        </reference>
+    </adminhtml_smartslides_editslidersgroup-->
+    <adminhtml_smartslides_slides>
+        <reference name="content">
+            <block type="smartslides/adminhtml_smartslides" name="smartslides"/>
+        </reference>
+    </adminhtml_smartslides_slides>
+    <adminhtml_smartslides_editslide>
+        <reference name="content">
+            <block type="smartslides/adminhtml_smartslides_edit" name="smartslide_edit" />
+        </reference>
+    </adminhtml_smartslides_editslide>
+
+</layout>

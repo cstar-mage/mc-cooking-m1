@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_catalog_product_edit>
+        <reference name="product_tabs">
+            <action method="addTab">
+                <name>oitems_tab</name>
+                <block>oitems/adminhtml_catalog_product_tab</block>
+            </action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+    <last_ordered_classes>
+        <block type="oitems/order_email_items" name="items" template="email/order/classes.phtml">
+        </block>
+    </last_ordered_classes>
+</layout>

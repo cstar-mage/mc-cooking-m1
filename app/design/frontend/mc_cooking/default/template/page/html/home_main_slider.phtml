@@ -1,0 +1,62 @@
+<?php
+/**
+ * block type="smartslides/slides"
+ */
+?>
+<?php $slidesCollection = $this->getSlidesCollection(); $count = $slidesCollection->count(); ?>
+<?php if($count): ?>
+
+	<div class="contentbanner" style="display:none;">
+		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('homepage_promotion')->toHtml() ?>
+		<!--<a class="commercial-veideo" data-toggle="modal" data-target="#contentbanner"></a>-->
+	</div>
+
+	<!-- Modal -->
+	<?php /*
+	<div class="modal fade" id="contentbanner" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <div class="modal-body">
+			   <iframe width="560" height="315" src="https://www.youtube.com/embed/ZSt9tm3RoUU" frameborder="0" allowfullscreen></iframe>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	*/ ?>
+
+
+    <div data-ride="carousel" class="carousel slide" id="myCarousel">
+        <!-- Indicators -->
+        <!--  <ol class="carousel-indicators">
+            <li class="" data-slide-to="0" data-target="#myCarousel"></li>
+            <li data-slide-to="1" data-target="#myCarousel" class=""></li>
+            <li data-slide-to="2" data-target="#myCarousel" class="active"></li>
+        </ol> -->
+	<?php $baseUrl = 'http://mccooking.com'; ?>
+        <div role="listbox" class="carousel-inner">
+            <?php $inc = 0; ?>
+            <?php foreach($slidesCollection as $slide): ?>
+                <div class="item <?php if($inc == 0): ?> active <?php endif; ?>">
+                    <img alt="<?php echo $slide->getImageAlt(); ?>" src="<?php echo str_replace($baseUrl, '', $this->getSlideImageUrl($slide)); ?>"
+                         class="<?php echo $slide->getSlideClass(); ?>">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1><span><?php echo $slide->getTitle(); ?></span></h1>
+                        </div>
+                    </div>
+                </div>
+                <?php $inc ++;?>
+            <?php endforeach; ?>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+<?php endif; ?>
+

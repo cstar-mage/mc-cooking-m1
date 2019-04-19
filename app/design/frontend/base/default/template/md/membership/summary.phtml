@@ -1,0 +1,274 @@
+<?php
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+
+    $helper = Mage::helper('md_membership');
+    $plan = $this->getCurrentPlan();
+    $additionalLabel = ($plan->getIsLimited()) ? ' - '.$plan->getTotalOccurences().' time(s).': '';
+    $paymentConfig = Mage::getSingleton('payment/config');
+    $ccTypes = $paymentConfig->getCcTypes();
+    $months = $paymentConfig->getMonths();
+    $years = $paymentConfig->getYears();
+    $_ccRequiredMethod = array(
+        Mage_Paygate_Model_Authorizenet::METHOD_CODE,
+        
+    );
+    
+    $_ccRedirectMethod = array(
+        Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS
+    );
+    $payActionEnabled = false;
+?>
+<style type="text/css">
+    .sp-methods dd label{
+        color: #636363;
+        background-color: #e7e7e7;
+        padding: 5px 10px;
+        display: inline-block;
+        width: auto;
+        max-width: none;
+        min-width: 210px !important;
+        float: none;
+        padding: 6px 10px 6px 40px;
+        border: 1px solid #cccccc;
+    }
+    .sp-methods dd input.radio{
+        float: left;
+        margin-right: -40px;
+        margin-top: 10px;
+        margin-left: 15px;
+        position:relative;
+    }
+    .sp-methods dd ul li .form-list li label{
+        padding:0;
+        margin:0;
+        background:none;
+        border:none;
+        float:left;
+    }
+    .sp-methods dd ul li .form-list li p.required{
+        float:right;
+    }
+    #payment_form_authorizenet p.required{margin-bottom: 5px;}
+    #payment_form_authorizenet .input-box select.validate-cc-type-select{clear:both !important;}
+</style>
+<div class="cart display-single-price">
+    <div class="page-title title-buttons">
+        <h1><?php echo $helper->__('Membership Plan Summary') ?></h1>
+    </div>
+    <table id="summary-table" class="cart-table data-table">
+        <colgroup>
+            <col width="1" />
+            <col />
+            <col />
+            <col width="1" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th><?php echo $helper->__('Plan') ?></th>
+                <th>&nbsp;</th>
+                <th><?php echo $helper->__('Details') ?></th>
+                <th style="text-align:center;"><?php echo $helper->__('Amount') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="product-cart-image">
+                    <a href="<?php echo $plan->getPlanUrl() ?>" title="<?php echo $plan->getTitle() ?>"><img src="<?php echo $plan->getImageUrl(75,75) ?>" /></a>
+                </td>
+                <td class="product-cart-info">
+                    <h2 class="product-name"><a href="<?php echo $plan->getPlanUrl() ?>" title="<?php echo $plan->getTitle() ?>"><?php echo $plan->getTitle() ?></a></h2>
+                </td>
+                <td>
+                    <div class="product-cart-sku">
+                        <strong><?php echo $helper->__('Initial Fee').': ' ?></strong><?php echo Mage::helper('core')->currency($plan->getInitialAmount(),true,false) ?><br />
+                        <strong><?php echo $helper->__('Billing Period').': ' ?></strong><?php echo $helper->getSubscriptionPlanLabel($plan->getBillingPeriod()).$additionalLabel ?><br />
+                        <?php if($plan->getTrialPeriodCount() > 0): ?>
+                            <strong><?php echo $helper->__('Trial Periods').': ' ?></strong><?php echo $plan->getTrialPeriodCount() ?><br />
+                            <strong><?php echo $helper->__('Trial Period Amount').': ' ?></strong><?php echo Mage::helper('core')->currency($plan->getTrialAmount(),true,false) ?>
+                        <?php endif; ?>
+                    </div>
+                </td>
+                <td class="product-cart-price">
+                    <?php echo Mage::helper('core')->currency($plan->getAmount(),true,true) ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="<?php echo $this->getPaymentPayUrl($plan) ?>" method="post" name="membership-summary-form" id="membership-summary-form">
+    <div class="cart-forms">
+        <div class="shipping">
+            <h2><?php echo $helper->__('Customer Information') ?></h2>
+            <div class="shipping-form">
+                <?php if($this->getAddressesHtmlSelect('billing') != ''): ?>
+                <ul class="form-list">
+                    <li>
+                        <label class="required"><em>*</em><?php echo $helper->__('Select Address'); ?></label>
+                        <div class="input-box">
+                            <?php echo $this->getAddressesHtmlSelect('billing') ?> 
+                        </div>
+                    </li>
+                </ul>
+                <?php endif; ?>
+                <!--<ul class="form-list" id="customer-address-fields">
+                    <li></li>
+                </ul>-->
+                <h2></h2>
+                <dl class="sp-methods" id="sp-methods">
+                    <dt><?php echo $helper->__('Payment Methods') ?></dt>
+                    <dd><ul>
+                    <?php foreach($this->getActiveMethods() as $_method): ?>
+                    <?php $_code = $_method->getCode(); ?>
+                            <?php $payActionEnabled = true; ?>
+                            <li>
+        <input id="membership_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="membership[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" class="radio validate-one-required-by-name" />
+        <label for="membership_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($_method->getTitle()) ?></label>
+                            </li>
+                            <li>
+                                
+                                <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+                                    <?php if($_method->getCode() && in_array($_code,$_ccRequiredMethod)): ?>
+                                    <li>
+                <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+                <label for="<?php echo $_code ?>_cc_type" class="required">
+                <em>*</em>
+                    <?php echo $this->__('Credit Card Type') ?>
+                </label>
+                <div class="input-box">
+                    <select id="<?php echo $_code ?>_cc_type" name="<?php echo $_code ?>[cc_type]" class="required-entry validate-cc-type-select" title="<?php echo $this->__('Credit Card Type') ?>" autocomplete="off">
+                        <option value=""><?php echo $this->__('--Please Select--')?></option>
+                        <?php foreach($ccTypes as $code=>$label): ?>
+                            <option value="<?php echo $code ?>"><?php echo $label ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label for="<?php echo $_code ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
+                <div class="input-box">
+                    <input type="text" id="<?php echo $_code ?>_cc_number" name="<?php echo $_code ?>[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type" value="" />
+                </div>
+            </li>
+            <li id="<?php echo $_code ?>_cc_type_exp_div">
+                <label for="<?php echo $_code ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
+                <div class="input-box">
+            <div class="v-fix">
+                <select id="<?php echo $_code ?>_expiration" name="<?php echo $_code ?>[cc_exp_month]" class="month validate-cc-exp required-entry">
+                
+                <?php foreach ($months as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+            <div class="v-fix">
+                
+                <select id="<?php echo $_code ?>_expiration_yr" name="<?php echo $_code ?>[cc_exp_year]" class="year required-entry">
+                <?php foreach ($years as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+            </li>
+            <?php if($_method->hasVerification()): ?>
+    <li id="<?php echo $_code ?>_cc_type_cvv_div">
+        <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <input type="text" pattern="\d*" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" name="<?php echo $_code ?>[cc_cid]" value="" />
+            </div>
+            <!--<a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>-->
+        </div>
+    </li>
+    <?php elseif($_method->getCode() && in_array($_method->getCode(),$_ccRedirectMethod)): ?>
+            <?php if($_method->getCode() == Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS): ?>
+            <li class="form-alt"><?php echo $this->__('You will be redirected to the PayPal website when you place an order.'); ?></li>
+            <?php endif; ?>
+    <?php endif; ?>
+                                </ul>
+                            </li>
+                            
+                            <?php endif; ?>
+                    <?php endforeach; ?>
+                    </ul></dd>
+                    
+                </dl>
+                <div class="buttons-set">
+                    <button <?php if(!$payActionEnabled): ?>disabled="disabled"<?php endif; ?> id="subscription-submit-btn" style="background: #2e8ab8;cursor:pointer;color:#ffffff;float:left;" type="submit" title="<?php echo $helper->__('Submit Payment') ?>" class="button <?php if(!$payActionEnabled): ?>disabled<?php endif; ?>" name="do" value="<?php echo $helper->__('Submit Payment') ?>">
+                        <span><span><?php echo $helper->__('Submit Payment') ?></span></span>
+                    </button>&nbsp;
+                    <span class="please-wait" id="billing-please-wait" style="display:none;">
+                        <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="Loading next step..." title="Submitting payment information..." class="v-middle"> <?php echo $helper->__('Submitting payment information...') ?>        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+        </form>
+</div>
+<script type="text/javascript">
+    var partialPaymentForm = new VarienForm('membership-summary-form');
+    $('sp-methods').select('input[type="radio"]').each(function(element){
+                Event.observe($(element),'change',function(event){
+                    var tElement = event.element();
+                    $('sp-methods').select('input[type="radio"]').each(function(tmpElement){
+                        if(tmpElement.value == tElement.value){
+                            $('payment_form_'+tmpElement.value).setStyle({display:"block"});
+                        }else{
+                            $('payment_form_'+tmpElement.value).setStyle({display:"none"});
+                        }
+                    })
+                });
+           }.bind(this));
+           
+    Event.observe('subscription-submit-btn','click',function(event){
+        event.stop();
+        if (partialPaymentForm.validator.validate()) {
+            var form = $('membership-summary-form');
+            form.request({
+                parameters:{subscription_date:'<?php echo $plan->getData('customer_subscription_Date') ?>'},
+                onLoading:function(){
+                    $('billing-please-wait').show();
+                },
+                onComplete: function(transport){
+                    if (transport && transport.responseText) {
+                        var response = transport.responseText.evalJSON(true);
+                        if(response.error){
+                            alert(response.error);
+                        }else{
+                            if(response.express_checkout_post_url){
+                                window.location = response.express_checkout_post_url;
+                            }else if(response.redirect_url){
+                                window.location = response.redirect_url;
+                            }
+                        } 
+                    }
+                    $('billing-please-wait').hide();
+                }
+            });
+        }
+    });
+</script>

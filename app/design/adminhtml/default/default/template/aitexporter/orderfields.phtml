@@ -1,0 +1,81 @@
+<?php
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+?>
+<script type="text/javascript">
+//<![CDATA[
+function checkAllOrderFields(element)
+{
+    if(element.checked)
+    {
+        $elements = $$('.orderField_checkbox').each(check);
+    }
+    else
+    {
+        $elements = $$('.orderField_checkbox').each(uncheck);
+    }
+}
+function check(checkbox)
+{
+    checkbox.checked = true;
+}
+function uncheck(checkbox)
+{
+    checkbox.checked = false;
+}
+//]]>
+
+<?php
+if(version_compare(Mage::getVersion(),'1.4.1.0','<')) 
+{
+    $_orderFields  = $this->getOrderFields();
+}
+else
+{
+    $_orderFields = $this->getOrderFields();
+}
+$_columns      = 4;
+$_rows         = ceil(count($_orderFields) / $_columns);
+
+?>
+
+</script>
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('aitexporter')->__('Order Fields') ?></h4>
+</div>
+<fieldset>
+        <span class="field-row">
+            <label for="checkOrderFields"><?php echo Mage::helper('aitexporter')->__('Select All/Unselect All') ?></label>
+            <span>
+                <input type="checkbox" id="checkOrderFields" name="check" value="1" onclick="checkAllOrderFields(this)" />
+            </span>
+        </span>
+    </fieldset>
+<fieldset>
+    <legend><?php echo Mage::helper('aitexporter')->__('Order Fields') ?></legend>
+    <?php for ($row = 0; $row < $_rows; $row++) : ?>
+        <div class="clear">
+        <?php for ($column = 0; $column < $_columns; $column++) : ?>
+            <?php $index = $row * $_columns + $column ?>
+                <?php if (isset($_orderFields[$index])) : ?>
+                    <?php $field = $_orderFields[$index] ?>
+            <span class="field-row" style="float: left; width: 220px;">
+                <label for="orderField<?php echo $this->getAttributeCodeEavFlat($field) ?>" style="float:none;margin:2px;padding:2px;"><?php echo $this->getAttributeCodeEavFlat($field) ?>
+                </label>
+                <span>
+                    <input type="checkbox" style="float:left" id="orderField<?php echo $this->getAttributeCodeEavFlat($field) ?>" class="orderField_checkbox" name="order_field[<?php echo $this->getAttributeCodeEavFlat($field) ?>]" value="1" 
+                            <?php echo $this->getChecked('order_field/' . $this->getAttributeCodeEavFlat($field)) ?> />
+                </span>
+            </span>
+            <?php endif ?>
+        <?php endfor ?>
+        </div>
+    <?php endfor ?>
+</fieldset>

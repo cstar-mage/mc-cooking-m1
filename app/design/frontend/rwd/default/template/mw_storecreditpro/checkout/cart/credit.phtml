@@ -1,0 +1,60 @@
+<?php 
+$max_credit_checkout = Mage::helper('checkout')->formatPrice($this->getMaxCreditCheckout());
+$min_credit_checkout = Mage::helper('checkout')->formatPrice($this->getMinCreditCheckout());
+?>
+<form id="mw-discount-storecredit-form" action="<?php echo $this->getUrl('storecreditpro/checkout_cart/creditPost') ?>" method="post">
+    <div class="discount">
+        <h2><?php echo $this->__('Use Credit') ?></h2>
+        <div class="discount-form">
+        	<?php if($this->getCustomerId()):?>
+	            <input type="hidden" name="mw_remove_storecredit" id="mw_remove_storecredit" value="0" />
+	            <div class="input-box">
+	                <input class="input-text" id="mw_storecredit_value" name="mw_storecredit_value" style="margin-right: 5px !important; width: 130px !important;" value="<?php if($this->getCreditByCheckout() >0) echo $this->getCreditByCheckout() ?>" />
+	            	<button type="button" title="<?php echo $this->__('Apply Credit') ?>" class="button" onclick="creditForm.submit(false)" value="<?php echo $this->__('Apply Credit') ?>"><span><span><?php echo $this->__('Apply Credit') ?></span></span></button>
+	            </div>
+	           <?php /* ?> <div class="buttons-set">
+	                <button type="button" title="<?php echo $this->__('Apply Credit') ?>" class="button" onclick="creditForm.submit(false)" value="<?php echo $this->__('Apply Credit') ?>"><span><span><?php echo $this->__('Apply Credit') ?></span></span></button>
+	                <?php if($this->getCreditByCheckout() >0): ?>
+	                    &nbsp; <button type="button" title="<?php echo $this->__('Cancel Credit') ?>" class="button" onclick="creditForm.submit(true)" value="<?php echo $this->__('Cancel Credit') ?>"><span><span><?php echo $this->__('Cancel Credit') ?></span></span></button>
+	                <?php endif;?>
+	            </div> <?php */?>
+	            <div style="padding-top: 10px;"><input type="checkbox" name="mw_use_max_credit" id="mw_use_max_credit" /><label for="mw_use_max_credit" style="padding-left: 5px;display: inline !important;"><?php echo $this->__('Use maximum credit %s', $max_credit_checkout); //Mage::helper('core')->currency($this->getMaxCreditCheckout(),true,false));?></label></div>
+            	<div style="padding-top: 5px;"><label for="mw_use_min_credit" style="display: inline !important;"><?php echo $this->__('Minimum credit required is %s ', $min_credit_checkout); //Mage::helper('core')->currency($this->getMinCreditCheckout()));?></label></div>
+	           <?php else:?>
+	         	<div style="text-align: center; margin-top:10px; border-top: 1px dashed;padding-top: 10px;"><?php echo $this->__("Please <a href='%s'>LOGIN</a> to use credit", Mage::getUrl('customer/account/login',array('mw_storecredit_login' => 1)))?></div>
+            <?php endif;?>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	var creditForm = new VarienForm('mw-discount-storecredit-form');
+	creditForm.submit = function (isRemove) {
+	    if (isRemove) {
+	        $('mw_storecredit_value').removeClassName('required-entry');
+	        $('mw_remove_storecredit').value = "1";
+	    } else {
+	        $('mw_storecredit_value').addClassName('required-entry validate-number');
+	        $('mw_remove_storecredit').value = "0";
+	    }
+	    return VarienForm.prototype.submit.bind(creditForm)();
+	};
+	
+	document.observe('dom:loaded', function () {
+		if($('mw_storecredit_value').value == <?php echo $this->getMaxCreditCheckout()?>)
+		{
+			$('mw_use_max_credit').checked = true;
+		}else{
+			$('mw_use_max_credit').checked = false;
+		}
+		
+	});
+	$('mw_use_max_credit').observe('click', function(e){
+		if(this.checked){
+			$('mw_storecredit_value').value = <?php echo $this->getMaxCreditCheckout();?>;
+		}
+
+	});
+
+//]]>
+</script>

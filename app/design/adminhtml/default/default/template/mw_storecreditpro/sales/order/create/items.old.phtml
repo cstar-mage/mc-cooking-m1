@@ -1,0 +1,48 @@
+<?php 
+$store_id = $this->getStoreId();
+$credits = $this->getCredits();
+if($credits == 0) $credits = '';
+?>
+<div class="entry-edit box-right">
+    <div class="entry-edit-head">
+        <h4 class="icon-head"><?php echo $this->__('Use Credit'); ?></h4>
+     </div>
+     <fieldset class="np">
+         <div class="content">
+
+            <p><input id="mw_storecredit_add_input" type="text" class="input-text" value="<?php echo $credits; ?>" style="width:200px" />&nbsp;<button onclick="applyMwStorecredit()" type="button" value="" class="scalable"><span><span><span><?php echo $this->__('Apply Credit'); ?></span></span></span></button></p>
+            <?php /*if($credits > 0){ ?>
+                <p><strong><?php echo $credits; ?></strong> [<a href="#" onclick="removeMwStorecredit('<?php echo $credits; ?>'); return false;" title="<?php echo $this->__('Remove'); ?>"><?php echo $this->__('Remove'); ?></a>]</p>
+            <?php }*/?>
+            
+        	<div style="padding-top: 10px;"><input type="checkbox" name="mw_use_max_credit" id="mw_use_max_credit" /><label for="mw_use_max_credit" style="padding-left: 5px;display: inline !important;"><?php echo $this->__('Use maximum credit <b>%s</b>',Mage::helper('core')->currency($this->getMaxCreditToCheckOut()));?></label></div>
+            <div style="padding-top: 5px;"><label for="mw_use_min_credit" style="display: inline !important;"><?php echo $this->__('Minimum credit required is <b>%s</b> ',Mage::helper('core')->currency($this->getMinCreditToCheckOut()));?></label></div>
+        	
+        </div>        
+    </fieldset>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+
+   checkMwMaxCredit();
+   document.observe('dom:loaded', function () {
+	   checkMwMaxCredit();
+		
+	});
+	$('mw_use_max_credit').observe('click', function(e){
+		if(this.checked){
+			$('mw_storecredit_add_input').value = <?php echo $this->getMaxCreditToCheckOut();?>;
+		}
+
+	});
+	function checkMwMaxCredit(){
+        
+    	if($('mw_storecredit_add_input').value == <?php echo $this->getMaxCreditToCheckOut()?>)
+    	{
+    		$('mw_use_max_credit').checked = true;
+    	}else{
+    		$('mw_use_max_credit').checked = false;
+    	}
+    };
+</script>

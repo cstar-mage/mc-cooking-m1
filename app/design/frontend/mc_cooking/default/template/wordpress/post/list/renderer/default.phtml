@@ -1,0 +1,46 @@
+<?php
+/**
+ * @category    Fishpig
+ * @package     Fishpig_Wordpress
+ * @license     http://fishpig.co.uk/license.txt
+ * @author      Ben Tideswell <help@fishpig.co.uk>
+ */
+?>
+<?php $post = $this->getPost() ?>
+<div class="post-list-item">
+	<?php echo $this->getBeforePostContentHtml() ?>
+	<div class="post-entry entry<?php if ($post->getFeaturedImage()): ?> post-entry-with-image<?php endif; ?>">
+		<div class="hovereffect">
+		<?php if ($post->isViewableForVisitor()): ?>
+			<?php if ($featuredImage = $post->getFeaturedImage()): ?>
+				<div class="featured-image left">
+					<a href="<?php echo $post->getPermalink() ?>" title="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"><img src="<?php echo $featuredImage->getMediumImage() ?>" alt="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"/></a>
+				</div>
+			<?php endif; ?>
+			<div class="overlay" onclick="location.href='<?php echo $post->getPermalink() ?>';" title="<?php echo $this->escapeHtml($post->getPostTitle()) ?>">
+            <h2><?php echo $this->escapeHtml($post->getPostTitle()) ?></h2>
+            <!--<h2>
+					<?php if ($this->displayExcerptInFeed() || $post->hasMoreTag()): ?>
+						<?php 
+							/**
+							* You can pass the number of words you want the excerpt to be shortened to like so
+							* The below code will only show the first 50 words of the excerpt
+							* <?php echo $post->getPostExcerpt(50) ?>
+							*
+							**/ 
+						?>
+						<?php echo $post->getPostExcerpt() ?>
+					<?php else: ?>
+						<?php echo $post->getPostExcerpt(150) ?>
+					<?php endif; ?>
+				<?php else: ?>
+					<?php echo $this->getPasswordProtectHtml($post) ?>
+				<?php endif; ?>
+			</h2>
+		<h4><?php echo $this->getAfterPostContentHtml() ?></h4>-->
+		<a class="info" href="<?php echo $post->getPermalink() ?>" title="<?php echo $this->escapeHtml($post->getPostTitle()) ?>">more</a>
+		</div>
+		</div>
+	</div>
+	
+</div>

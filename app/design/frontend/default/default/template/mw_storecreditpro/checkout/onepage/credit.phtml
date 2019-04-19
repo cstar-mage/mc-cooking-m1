@@ -1,0 +1,92 @@
+<?php 
+$max_credit_checkout = Mage::helper('checkout')->formatPrice($this->getMaxCreditCheckout());
+$min_credit_checkout = Mage::helper('checkout')->formatPrice($this->getMinCreditCheckout());
+?>
+    <div class="sp-methods">
+        <label><?php //echo $this->__('Using Credit') ?></label>
+        <div class="discount-form">
+        	<?php if($this->getCustomerId()):?>
+	            <div class="input-box">
+	                <label for="mw_use_max_credit" style="margin-right: 5px;" ><?php echo $this->__('Use Credit') ?></label><input class="input-text" id="mw_storecredit_value" name="mw_storecredit_value" value="<?php if($this->getCreditByCheckout() >0) echo $this->getCreditByCheckout() ?>" />
+	            	 <button type="button" title="<?php echo $this->__('Apply') ?>" class="button" onclick="mwUpdateCredit()" value=""><span><span><?php echo $this->__('Apply') ?></span></span></button>
+	            </div>
+	               
+	            <div style="padding-top: 10px;"><input type="checkbox" name="mw_use_max_credit" id="mw_use_max_credit" /><label for="mw_use_max_credit" style="padding-left: 5px;display: inline !important;"><?php echo $this->__('Use maximum credit %s',$max_credit_checkout); //$this->getMaxCreditCheckout());?></label></div>
+            	<div style="padding-top: 5px;"><label for="mw_use_min_credit" style="display: inline !important;"><?php echo $this->__('Minimum credit required is %s ', $min_credit_checkout); //Mage::helper('core')->currency($this->getMinCreditCheckout()));?></label></div>
+        	<?php else:?>
+	         	<div style="text-align: center; margin-top:10px; border-top: 1px dashed;padding-top: 10px;"><?php echo $this->__("Please <a href='%s'>LOGIN</a> to use credit", Mage::getUrl('customer/account/login',array('mw_storecredit_login' => 1)))?></div>
+            <?php endif;?>
+        </div>
+    </div>
+
+<script type="text/javascript">
+//<![CDATA[
+	
+	document.observe('dom:loaded', function () {
+		checkMaxCredit();
+	});
+	
+	$('mw_use_max_credit').observe('click', function(e){
+		if(this.checked){
+			$('mw_storecredit_value').value = <?php echo $this->getMaxCreditCheckout();?>;
+			mwUpdateCredit();
+		}
+	});
+	function checkMaxCredit()
+	{
+		if($('mw_storecredit_value').value == <?php echo $this->getMaxCreditCheckout()?>)
+		{
+			$('mw_use_max_credit').checked = true;
+		}else{
+			$('mw_use_max_credit').checked = false;
+		}
+	}
+	function mwUpdateCredit()
+	{
+		checkMaxCredit();
+		var amount = $('mw_storecredit_value').value;
+
+		if($('mw-osc-column-container')){
+			if($('loading-mask')) $('loading-mask').show();
+		}else{
+			if($('checkout-payment-method-load')) $('checkout-payment-method-load').update($('mw_storecredit_onepage-please-wait').innerHTML);
+		}
+		
+		new Ajax.Request("<?php echo Mage::getUrl('storecreditpro/checkout_cart/onepagepost',array('_secure'=>Mage::app()->getFrontController()->getRequest()->isSecure()))?>", {
+			   method: 'post',
+			   postBody: "mw_storecredit_value="+$('mw_storecredit_value').value,
+			   onComplete: function(data) {
+					$('checkout-payment-method-load').update(data.responseText);
+					if($('mw-osc-column-container')){
+						updatePaymentMethod(); 
+					}
+				}
+		});
+	};
+	function updateMwFormCredit()
+	{
+		if($('mw-osc-column-container')){
+			if($('loading-mask')) $('loading-mask').show();
+		}else{
+			if($('mw-checkout-payment-storecredit'))$('mw-checkout-payment-storecredit').update($('mw_storecredit_onepage-please-wait').innerHTML);
+		}
+		new Ajax.Request("<?php echo Mage::getUrl('storecreditpro/checkout_cart/updateformcredit',array('_secure'=>Mage::app()->getFrontController()->getRequest()->isSecure()))?>", {
+			   method: 'post',
+			   onComplete: function(data) {
+					$('mw-checkout-payment-storecredit').update(data.responseText);
+					if($('mw-osc-column-container')){
+						//updatePaymentMethod();
+						if($('loading-mask')) $('loading-mask').hide(); 
+					}
+				}
+		});
+	};
+
+//]]>
+</script>
+<div id="mw_storecredit_onepage-please-wait" style="display: none; ">
+	<div style="text-align:center;margin-top:30px;">
+	    <img src="<?php echo $this->getSkinUrl('mw_storecreditpro/images/loading.gif')?>" class="v-middle" alt="loading"> &nbsp; 
+	    <?php echo Mage::helper('storecreditpro')->__("Updating cart information...")?>
+	</div>
+</div>

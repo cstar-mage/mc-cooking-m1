@@ -1,0 +1,33 @@
+<?php
+/**
+ *block type="smartslides/slides" name="main.home.banners"
+ */
+?>
+<?php $productsCollection = $this->getLatestProductsCollection();  $count = $productsCollection->count(); ?>
+<?php if($count): ?>
+    <div data-ride="carousel" class="schedule" id="myCarousel">
+
+        <?php $inc = 0; ?>
+        <?php foreach($productsCollection as $product): ?>
+            <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+                <div class="hovereffect">
+                      <img alt="" src="<?php echo Mage::helper('catalog/image')->init($product, 'small_image')->keepFrame(false)->resize(667); ?>" class="img-responsive">
+                     
+                          <div class="overlay" onclick="location.href='<?php $imageLink = $product->getProductUrl(); if(!empty($imageLink)): ?><?php echo $imageLink; ?><?php else : ?> # <?php endif; ?>';">
+                            <h2>
+                                <?php echo $product->getName(); ?><br>
+                                <?php echo Mage::helper('datefilter')->getFormattedDateForProductListing($product); ?>
+                            </h2>
+                              <a href="<?php $imageLink = $product->getProductUrl(); if(!empty($imageLink)): ?><?php echo $imageLink; ?><?php else : ?> # <?php endif; ?>" class="info">more</a>
+                        </div>
+
+                </div>
+            </div>
+            <?php $inc ++;?>
+        <?php endforeach; ?>
+
+        <div class="container text-center col-xs-12">
+            <button class="btn schedule-btn"><a href="/cooking-classes">View monthly schedule</a></button>
+         </div>
+    </div>
+<?php endif; ?>

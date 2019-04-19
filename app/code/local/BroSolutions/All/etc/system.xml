@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <globcrosssells translate="label" module="core">
+            <label>Global Cross Sells</label>
+            <sort_order>100</sort_order>
+        </globcrosssells>
+    </tabs>
+    <sections>
+        <globcrosssells_selection translate="label" module="core">
+            <label>General</label>
+            <tab>globcrosssells</tab>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <globcrosssells_group translate="label" module="core">
+                    <label>Global Cross Sellls</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <globcrosssells_ids translate="label">
+                            <label>Global Cross Sells Ids</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </globcrosssells_ids>
+                    </fields>
+                </globcrosssells_group>
+            </groups>
+        </globcrosssells_selection>
+    </sections>
+</config>

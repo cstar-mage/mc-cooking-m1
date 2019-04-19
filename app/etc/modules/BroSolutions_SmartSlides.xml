@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <BroSolutions_SmartSlides>
+            <active>true</active>
+            <codePool>local</codePool>
+        </BroSolutions_SmartSlides>
+    </modules>
+</config>

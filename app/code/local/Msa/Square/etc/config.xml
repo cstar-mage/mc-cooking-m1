@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Msa_Square>
+            <version>0.1.0</version>
+        </Msa_Square>
+    </modules>
+    
+    <global>
+		<helpers>
+			<msa_square>
+				<class>Msa_Square_Helper</class>
+			</msa_square>
+		</helpers>
+        <blocks>
+			<msa_square>
+				<class>Msa_Square_Block</class>
+			</msa_square>
+		</blocks>
+		<models>
+			<msa_square>
+				<class>Msa_Square_Model</class>
+				<resourceModel>msa_square_resource</resourceModel>
+			</msa_square>
+            <msa_square_resource>
+                <class>Msa_Square_Model_Resource</class>
+                <entities>
+                    <transaction>
+                        <table>msa_square_transaction</table>
+                    </transaction>
+                    <item>
+                        <table>msa_square_transaction_item</table>
+                    </item>
+                </entities>
+            </msa_square_resource>
+		</models>
+		
+		<resources>
+			<square_setup>
+				<setup>
+					<module>Msa_Square</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</square_setup>
+            <square_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </square_write>
+            <square_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </square_read>
+		</resources>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <msa_square after="Mage_Adminhtml">Msa_Square_Adminhtml</msa_square>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <crontab>
+        <jobs>
+            <get_square_transactions>
+                <schedule>
+                    <cron_expr>00 07 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>msa_square/observer::getSquareTransactions</model>
+                </run>
+            </get_square_transactions>
+        </jobs>
+    </crontab>
+</config>

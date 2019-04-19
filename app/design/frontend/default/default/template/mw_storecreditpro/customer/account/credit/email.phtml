@@ -1,0 +1,14 @@
+
+<form action="<?php echo $this->getUrl('storecreditpro/index/email') ?>" method="post" id="form-validate">
+    <ul class="form-list">
+    	<li class="control"><input type="checkbox" name="credit_updated_notification" id="credit_updated_notification" value="1" title="<?php echo $this->__('Subscribe to balance update') ?>"<?php if($this->getCreditUpdatedNotification()): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="credit_updated_notification"><?php echo $this->__('Subscribe to balance update') ?></label></li>
+    </ul>
+    <div class="buttons-set">
+        <button type="submit" title="<?php echo $this->__('Save') ?>" class="button"><span><span><?php echo $this->__('Save') ?></span></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var dataForm = new VarienForm('form-validate', true);
+//]]>
+</script>

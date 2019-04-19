@@ -1,0 +1,72 @@
+<?php
+$picture = $this->getSelectionPicture();
+$giftCardModel = $this->getGiftCardModel();
+$currencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+?>
+<!DOCTYPE html>
+
+<!--[if lt IE 7 ]> <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $this->getLang(); ?>" id="top" class="no-js"> <!--<![endif]-->
+
+<head>
+<style type="text/css">
+    body{font-family: arial,sans-serif;}
+</style>
+<script type="text/javascript">
+    window.print();
+</script>
+</head>
+<body>
+    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr>
+    <td align="center" valign="top" style="padding:0;">
+        <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" >
+        	<tr>
+				<td align="center" style="text-align: center;">
+					<!--<center><img src="{{var data.picture}}" /></center>-->
+					<img style="display:block; max-width:100%;" src="<?php echo $picture?>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style="float:left; color:#bdbec1; font-size:12px;">
+						<b>Main Course Cooking School</b><br>
+						<i>At MainStreet America</i><br>
+						18750 I-45 North, Spring, TX 77373<br>
+						2 8 1 . 8 2 5 . 4 4 4 0
+					</div>
+					<div style="float:right; padding-top:15px;">
+						<a href="http://www.mccooking.com" style="color:#bdbec1; font-size:14px; text-decoration:none;">www.mccooking.com</a>
+					</div>
+				</td>
+			</tr>
+            <tr>
+                <td valign="top">
+                    <p style="font-size:15px; line-height:16px; margin:0; color:#231f20;">You have received a Gift Certificate to Main Course Cooking School.</p>
+				</td>
+            </tr>
+			
+			<tr>
+				<td style="font-size:15px; line-height:24px; margin:0; color:#231f20 !important;">
+                	To: <?php echo $giftCardModel->getMailTo(); ?><br>
+                	From: <?php echo $giftCardModel->getMailFrom(); ?><br>
+                	Message: <?php echo $giftCardModel->getMailMessage(); ?><br>
+                	Gift card value: <?php echo $currencySymbol; ?><?php echo $giftCardModel->getCardAmount(); ?><br>
+                	Gift card claim code: <?php echo $giftCardModel->getCardCode(); ?>
+                </td>
+			</tr>
+            <tr>
+                <td>
+                	<p style="font-size:12px; margin:0; line-height:20px;"><a href="{{store url=""}}" style="color:#231f20 !important; text-decoration:none;">Start shopping now</a>, and apply your gift card code in shopping cart or during checkout.<br>
+					If you have any questions please contact us at info@mccooking.com</p>
+			</td>
+			</tr>
+        </table>
+    </td>
+</tr>
+</table>
+</body>
+</html>

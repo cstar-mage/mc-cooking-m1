@@ -1,0 +1,41 @@
+
+<div class="dashboard">
+	<div class="page-title    page-head">
+    	<h1><?php echo $this->__('Credits Manager') ?></h1>
+	</div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    
+    <div class="account-box ad-account-info    box-account box-info">
+	    <div class="head    box-head">
+	    		<h2><?php echo $this->__('Credit Information') ?></h2>
+	    </div>
+    	<?php echo $this->getChildHtml('storecredit_info'); ?>
+    </div>
+    
+    <?php $credit = Mage::helper('storecreditpro')->getCreditByCustomer() ?>
+    <?php //if($credit):?>
+	    <?php if($this->getChild('storecredit_transaction')):?>
+	    <div class="box-account box-recent account-box ad-orders">
+	        <div class="head box-head">
+	            <h2><?php echo $this->__('Transaction History') ?></h2>
+	        </div>
+	        <?php echo $this->getChildHtml('storecredit_transaction') ?>
+	    </div>
+	    <?php endif;?>
+	        
+	    <?php //if(Mage::helper('storecreditpro')->allowSendCreditToFriend()):?>
+	    	<?php echo $this->getChildHtml('storecredit_send') ?>
+	    <?php //endif;?>
+	    	
+    <?php //endif;?>
+    
+    <?php if($this->getChild('storecredit_email')):?>
+    <div class="box-account box-info account-box ad-account-info">
+        <div class="head box-head">
+		<h2><?php echo $this->__('Email Notification Settings') ?></h2>
+        </div>
+        <?php echo $this->getChildHtml('storecredit_email') ?>
+    </div>
+    <?php endif;?>
+    
+</div>

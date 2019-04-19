@@ -1,0 +1,147 @@
+<?php
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+$helper = Mage::helper('md_membership');
+$coreHelper = Mage::helper('core');
+$plan = $this->getPlan();
+$subscription = $this->getSubscription();
+$summary = $subscription->getPaymentSummary();
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title">
+    <h1><?php echo $this->getTitle() ?></h1>
+</div>
+<dl class="order-info">
+    <dt><?php echo $this->__('About This Membership Plan:') ?></dt>
+    <dd><ul>
+            <li><b><?php echo $this->__('Membership Plan Information.') ?></b></li>
+            <li><?php echo $this->getCancelButtonHtml() ?></li>
+            <li><?php echo $this->getActivateButtonHtml() ?></li>
+            <li><?php echo $this->getSuspendButtonHtml() ?></li>
+        </ul></dd>
+</dl>
+<p class="order-date">
+    <?php echo $this->__('Order Date: %s',$coreHelper->formatDate($subscription->getProfileStartDate(),'long')) ?>
+</p>
+<div class="col2-set order-info-box">
+    <div class="col-1">
+        <div class="box">
+            <img src="<?php echo $plan->getImageUrl() ?>" width="200px" />
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="box">
+            <div class="box-title">
+                <h2><?php echo $this->__('Information') ?></h2>
+            </div>
+            <div class="box-content">
+                <b><?php echo $this->__('Reference #').': ' ?></b> <?php echo $subscription->getReferenceId() ?>
+                <br /><b><?php echo $this->__('Price').': ' ?></b> <?php echo $coreHelper->formatPrice($plan->getAmount(),true,false) ?>
+                <?php if($plan->getInitialAmount() > 0): ?>
+                <br /><b><?php echo $this->__('Initial Fee').': ' ?></b> <?php echo $coreHelper->formatPrice($plan->getInitialAmount(),true,false) ?>
+                <?php endif; ?>
+                <br /><b><?php echo $this->__('Type').': ' ?></b> <?php echo $helper->getSubscriptionPlanLabel($plan->getBillingPeriod()) ?>
+                <br /><b><?php echo $this->__('Total Cycles').': ' ?></b> <?php echo $plan->getTotalOccurences() ?>
+                <?php if($plan->getTrialAmount() > 0): ?>
+                <br /><b><?php echo $this->__('Trial Price').': ' ?></b> <?php echo $coreHelper->formatPrice($plan->getTrialAmount(),true,false) ?>
+                <br /><b><?php echo $this->__('Trial Cycles').': ' ?></b> <?php echo $plan->getTrialPeriodCount() ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col2-set order-info-box">
+    <div class="col-1">
+        <div class="box">
+            <?php if($this->getBillingAddressFormated()): ?>
+            <div class="box-title">
+                <h2><?php echo $this->__('Billing Address') ?></h2>
+            </div>
+            <div class="box-content">
+                <address>
+                    <?php echo $this->getBillingAddressFormated() ?>
+                </address>
+            </div>
+            <?php else: ?>
+            <div class="box-title">
+                <h2><?php echo $this->__('Customer Information') ?></h2>
+            </div>
+            <div class="box-content">
+                <address>
+                    <?php echo $this->getCustomer()->getFirstname().' '.$this->getCustomer()->getLastname() ?><br />
+                    <?php echo $this->getCustomer()->getEmail() ?>
+                </address>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="box box-payment">
+            <div class="box-title"><h2><?php echo $this->__('Payment Method') ?></h2></div>
+            <div class="box-content">
+                <p class="subtitle">
+                    <strong><?php echo $this->getPaymentMethodTitle(); ?></strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if($summary): ?>
+<h2 class="table-caption">
+    <?php echo $helper->__('Subscription Payment Summary'); ?>
+</h2>
+<table class="data-table linearize-table-large" id="my-summary-table">
+    <col />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th><?php echo $helper->__('Payment Date') ?></th>
+            <th><?php echo $helper->__('Paid Amount') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($summary as $_summary): ?>
+        <tr>
+            <td><?php echo $coreHelper->formatDate($_summary->getLastPayment(),'medium') ?></td>
+            <td><?php echo $coreHelper->currencyByStore($_summary->getLastPaidAmount(),$subscription->getStoreId(),true,false); ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php endif; ?>
+<div class="buttons-set">
+        <p class="back-link">
+            <a href="<?php echo $this->getBackUrl() ?>"><small>« </small><?php echo $helper->__('Back'); ?></a>
+        </p>
+    </div>
+<script type="text/javascript">
+    function confirmSetLocation(message,url){
+        if( confirm(message) ) {
+            window.location = url;
+        }
+    return false;
+    }
+</script>

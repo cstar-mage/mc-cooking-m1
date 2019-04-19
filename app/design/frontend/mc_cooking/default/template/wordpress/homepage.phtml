@@ -1,0 +1,23 @@
+<?php
+/**
+ * @category    Fishpig
+ * @package     Fishpig_Wordpress
+ * @license     http://fishpig.co.uk/license.txt
+ * @author      Ben Tideswell <help@fishpig.co.uk>
+ */
+?>
+<div class="wrapper">
+    <div class="relative-container">
+        <div class="inner-banner">
+            <img class="img-responsive" src="/media/wysiwyg/blog/kitchen-blog.jpg"/>
+        </div>
+
+        <div class="page-title blog-title <?php if (!$this->isFirstPage()): ?>not-<?php endif; ?>first-page<?php if ($this->isFirstPage() && $this->getTagLine()): ?> with-tagline<?php endif; ?>">
+            <p><span><?php echo $this->escapeHtml($this->getBlogTitle()) ?></span></p>
+        </div>
+    </div>
+
+	<div class="blog-home">
+		<?php echo $this->getPostListHtml() ?>
+	</div>
+</div>

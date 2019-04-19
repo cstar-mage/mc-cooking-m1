@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <system>
+            <children>
+                <convert>
+                    <children>
+                        <aitexporter_import translate="title" module="aitexporter">
+                                <title>Aitoc Order Import</title>
+                                <action>adminhtml/aitexporter_import/index</action>
+                        </aitexporter_import>
+                        <aitexporter_export translate="title" module="aitexporter">
+                            <title>Aitoc Order Export</title>
+                            <action>adminhtml/aitexporter_export/index</action>
+                        </aitexporter_export>
+                    </children>
+                </convert>
+            </children>
+        </system>
+    </menu>
+        
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <convert>
+                                <children>
+                                    <aitexporter_import>
+                                        <title>Aitoc Order Import</title>
+                                    </aitexporter_import>
+                                    <aitexporter_export>
+                                        <title>Aitoc Order Export</title>
+                                    </aitexporter_export>
+                                </children>
+                            </convert>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
+<!--
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+-->

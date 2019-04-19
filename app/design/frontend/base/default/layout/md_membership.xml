@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+-->
+<layout>
+    <default>
+        <reference name="top.links">
+            <action method="addLink" ifconfig="md_membership/membership_list/link_section" translate="label title" module="md_membership"><label helper="md_membership/getMembershipLinkTitle"/><url helper="md_membership/getMembershipUrl"/><title helper="md_membership/getMembershipLinkTitle"/><prepare/><urlParams/><position>80</position></action>
+        </reference>
+    </default>
+    <md_membership_index_list>
+        <reference name="root">
+            <action method="setTemplate"><template helper="md_membership/getMembershipPageLayout"/></action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title"><title helper="md_membership/getMembershipLinkTitle" /></action>
+        </reference>
+        
+        <reference name="content">
+            <block type="md_membership/list" name="md.membership.plans.list">
+                <block type="md_membership/list_toolbar" name="membership_list_toolbar" template="md/membership/list/toolbar.phtml">
+                        <block type="page/html_pager" name="membership_list_toolbar_pager"/>
+                        <action method="setDefaultListPerPage"><limit>4</limit></action>
+                            <action method="setDefaultGridPerPage"><limit>4</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>5</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>10</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>15</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>20</limit></action>
+                            <action method="addPagerLimit" translate="label"><mode>list</mode><limit>all</limit><label>All</label></action>
+                            <action method="addPagerLimit"><mode>grid</mode><limit>5</limit></action>
+                            <action method="addPagerLimit"><mode>grid</mode><limit>10</limit></action>
+                            <action method="addPagerLimit"><mode>grid</mode><limit>15</limit></action>
+                            <action method="addPagerLimit" translate="label"><mode>grid</mode><limit>all</limit><label>All</label></action>
+                </block>
+                <action method="addColumnCountLayoutDepend"><layout>empty</layout><count>6</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>one_column</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_left</layout><count>3</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_right</layout><count>3</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>three_columns</layout><count>3</count></action>
+                    <action method="setToolbarBlockName"><name>membership_list_toolbar</name></action>
+                    <!-- Since the addColumnCountLayoutDepend does not work, we are manually setting the max columns -->
+                    <action method="setColumnCount"><count>4</count></action>
+            </block>
+        </reference>
+    </md_membership_index_list>
+    <md_membership_index_view>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="head">
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+        </reference>
+        <reference name="content">
+            <block type="md_membership/view" name="md.membership.plan.view">
+                <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+            </block>
+        </reference>
+    </md_membership_index_view>
+    <md_membership_index_payment>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="md_membership/summary" name="md.membership.summary"></block>
+        </reference>
+    </md_membership_index_payment>
+    <md_membership_customer_subscriptions_list>
+        <label>Customer My Account Subscription List</label>
+        <update handle="customer_account"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>md/membership/style.css</name></action>
+            <action method="setTitle" translate="title"><title>My Subscriptions</title></action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="md_membership/customer_subscriptions_list" name="md.membership.subscriptions.list">
+                
+            </block>
+        </reference>
+    </md_membership_customer_subscriptions_list>
+    <md_membership_customer_subscriptions_view>
+        <label>Customer My Account Subscription View</label>
+        <update handle="customer_account"/>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>md/membership/style.css</name></action>
+            <action method="setTitle" translate="title"><title>Membership Plan Summary</title></action>
+        </reference>
+        <reference name="my.account.wrapper"> 
+            <block type="md_membership/customer_subscriptions_view" name="md.membership.subscriptions.view">
+                
+            </block>
+        </reference>
+    </md_membership_customer_subscriptions_view>
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="md_membership"><name>membership_subscriptions</name><path>md_membership/customer_subscriptions/list/</path><label>Membership Subscriptions</label></action>
+        </reference>
+    </customer_account>
+</layout>

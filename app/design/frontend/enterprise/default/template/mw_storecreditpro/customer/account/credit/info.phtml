@@ -1,0 +1,47 @@
+
+<?php $credit = Mage::helper('storecreditpro')->getCreditByCustomer() ?>
+
+	<div style="margin:10px 0px;">
+	    <p class="amount"><?php echo $this->__('Your Credit: <strong>%s</strong>', Mage::helper('checkout')->formatPrice($credit)); //Mage::helper('core')->currency($credit)) ?></p>
+	</div> 
+    <div class="control" style="margin-bottom:20px;" >
+    	<input type="checkbox" name="credit_updated_notification" id="credit_updated_notification" value="1" title="<?php echo $this->__('Subscribe to balance update') ?>"<?php if($this->getCreditUpdatedNotification()): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="credit_updated_notification"><?php echo $this->__('Subscribe to balance update') ?></label>
+    </div>
+    <div id="mw-loading-mask"></div>
+    
+<script type="text/javascript">
+//<![CDATA[
+	$('credit_updated_notification').observe('click', function(e){
+		if(this.checked){
+			mwSubscribe(1);
+		}else{
+			mwSubscribe(0);
+		}
+	});
+
+	function mwSubscribe(amount)
+	{
+		$('mw-storecredit-please-wait').show();
+		$('credit_updated_notification').setAttribute('disabled', 'disabled');
+		new Ajax.Request("<?php echo Mage::getUrl('storecreditpro/index/email',array('_secure'=>Mage::app()->getFrontController()->getRequest()->isSecure()))?>", {
+			   method: 'post',
+			   postBody: "credit_updated_notification="+amount,
+			   onComplete: function(data) {
+				    $('credit_updated_notification').removeAttribute('disabled');
+					$('mw-storecredit-please-wait').hide();
+			   }
+		});
+	};
+//]]>
+</script>
+
+<div id="mw-storecredit-please-wait" style="display: none; ">
+	<div style="text-align:center;margin-top:10px;">
+	    <img src="<?php echo $this->getSkinUrl('mw_storecreditpro/images/loading.gif')?>" class="v-middle" alt="loading"> &nbsp; 
+	    <?php echo Mage::helper('storecreditpro')->__("Updating subscribe information...")?>
+	</div>
+</div>
+
+
+
+

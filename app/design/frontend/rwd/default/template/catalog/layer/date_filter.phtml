@@ -1,0 +1,140 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     rwd_default
+ * @copyright   Copyright (c) 2006-2016 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for filter items block
+ *
+ * @see Mage_Catalog_Block_Layer_Filter
+ */
+?>
+<ol style="display: none;">
+    <?php foreach ($this->getItems() as $_item): ?>
+        <li>
+            <?php if ($_item->getCount() > 0): ?>
+                <a class="date-selections-link" href="<?php echo $this->urlEscape($_item->getUrl()) ?>" data-filter-date="<?php echo $this->getFormattedDateValue($_item); ?>">
+                    <?php echo $_item->getLabel() ?>
+                    <?php if ($this->shouldDisplayProductCount()): ?>
+                        <span class="count">(<?php echo $_item->getCount() ?>)</span>
+                    <?php endif; ?>
+                </a>
+            <?php else: ?>
+                <span>
+                <?php echo $_item->getLabel(); ?>
+                    <?php if ($this->shouldDisplayProductCount()): ?>
+                        <span class="count">(<?php echo $_item->getCount() ?>)</span>
+                    <?php endif; ?>
+            </span>
+            <?php endif; ?>
+        </li>
+    <?php endforeach ?>
+</ol>
+
+<input type="text" name="shipping_pickup_at_store_date" id="shipping_pickup_at_store_date" value="" style="opacity: 0;"/>
+
+<div id="bookingBox"></div>
+
+<style>
+.ui-datepicker-unselectable.date-not-selected .ui-state-default, #legend span.legend.gray { background: #777 !important; } 
+td.date-selected.sold-out-class .ui-state-default, #legend span.sold-out,
+td.sold-out-class .ui-state-default { background: #000 !important; } 
+td.private-class a.ui-state-default, #legend span.private { background: pink; opacity: 1; }
+td.class-date a { background: #c00 !important; }
+
+#legend { margin-left: -24px; }
+#legend span { width: 16px; height: 16px; }
+#legend li { margin-right: 14px; margin-left: 3px; font-size: 10px; } 
+</style>
+
+<ul id="legend">
+    <li><span class="legend green"></span><?php echo $this->__('Today'); ?></li>
+    <li><span class="legend gray"></span><?php echo $this->__('Open Date'); ?></li>
+    <li><span class="legend red"></span><?php echo $this->__('Classes'); ?></li>
+    <!--<li><span class="legend sold-out"></span> Sold out</li>-->
+    <li><span class="legend private"></span><?php echo $this->__('Private'); ?></li>
+    <li><span class="legend private-open"></span><?php echo $this->__('Private and Classes'); ?></li>
+</ul>
+
+<script>
+    var availableDates = <?php echo $this->getAvailableDatesStr(); ?>;
+    var availableClassDates = <?php echo $this->getClassDatesStr(); ?>;
+    var privateClassesDates = <?php echo $this->getAvailablePrivateClassesDatesStr(); ?>;
+    var soldOutClassesDates = <?php echo $this->getSoldOutClassesDates(); ?>;
+    var availableDatesInPast = <?php echo $this->getAvailableDatesInPastStr(); ?>;
+    var filterApplied = <?php echo $this->isFilterApplied(); ?>;
+    var appliedDatesBak = <?php echo $this->getAppliedDatesStr(); ?>;
+	var splitDates = appliedDatesBak[0].split('-');
+	var newDate = ((splitDates[2] -0) + 1);//.slice(-2);
+	if (newDate.length === 1) {
+		//var dow = ('0'+newDate).slice(-2);
+	} else {
+		//dow = newDate();
+	}
+	var appliedDates = splitDates[0]+'-'+splitDates[1]+'-'+ newDate;
+
+    jQuery(function() {
+        var defaultDateVal = new Date();
+        var monthsDifferrence = '<?php echo $this->getMonthDifferrence(); ?>';
+        if(monthsDifferrence != '0') {
+            defaultDateVal = monthsDifferrence;
+        }
+        jQuery( "#shipping_pickup_at_store_date" ).datepicker({
+            defaultDate: defaultDateVal,
+            beforeShowDay: function(date){
+                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                var isActive = (availableDates.indexOf(string) != -1) ? availableDates.indexOf(string) != -1 : (privateClassesDates.indexOf(string) != -1);
+                if(!isActive){
+                    isActive = (availableDatesInPast.indexOf(string) != -1);
+                }
+                var itemClass =  (appliedDates.indexOf(string) != -1) ? "date-selected" : "date-not-selected";
+                itemClass += (privateClassesDates.indexOf(string) != -1) ? ' private-class ' : '';
+                itemClass += (availableClassDates.indexOf(string) != -1) ? ' class-date ' : '';
+                //itemClass += (soldOutClassesDates.indexOf(string) != -1) ? ' sold-out-class ' : '';
+                return [isActive, itemClass];
+            },
+            dateFormat: "yy-mm-dd",
+            onSelect: function(clickedValue){
+                    jQuery('.date-selections-link').each(function(index, value) {
+                        var dateSelectionValue = jQuery(value).attr('data-filter-date');
+                        if(clickedValue == dateSelectionValue){
+                            window.location.href = jQuery(value).attr('href');
+                        }
+                    });
+
+            },
+            beforeShow:function(textbox, instance){
+                jQuery('#bookingBox').append(jQuery('#ui-datepicker-div'));
+                jQuery('#ui-datepicker-div').hide();
+            },
+        });
+        jQuery('#shipping_pickup_at_store_date').focus();
+        jQuery('#ui-datepicker-div').css("position", "static");
+    });
+
+    jQuery(window).load(function() {
+        jQuery('#shipping_pickup_at_store_date').focus();
+    });
+</script>

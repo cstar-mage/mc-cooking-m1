@@ -1,0 +1,64 @@
+<?php //var_dump($this->getSlidesGroup()->getData()); ?>
+<?php //var_dump($this->getSlidesCollection()->toArray());
+$sliderGroupDataJson = $this->getSlidesGroupJsonConfig();
+$slideGroupData = $this->getSlidesGroup();
+$slideType = (bool) $slideGroupData->getSlideType();
+$sliderCollection = $this->getSlidesCollection();
+
+?>
+
+<?php if($slideGroupData->getData('status') === '1' ): ?>
+<script>
+    jQuery(function($){
+        window.sliderConfigObj<?php echo $this->getSliderGroupId(); ?> = new Slider(<?php echo $sliderGroupDataJson; ?>);
+    });
+</script>
+
+<div class="slider-main-holder">
+    <?php if($slideType): ?>
+        <div class="full-screen-slider">
+            <div class="swiper-wrapper">
+                <?php $i = 0; foreach ($sliderCollection as $item): $i++; ?>
+                    <div class="item swiper-slide" style="background-image: url('<?php echo $this->getBaseUrl('media').'media/'.$item->getImagePath(); ?>');">
+                        <div class="text-block">
+                            <h3 class="display-2 ttu"><?php echo $item->getData('title'); ?></h3>
+                            <h4 class="display-1 ttu"><?php echo $item->getData('subtitle'); ?></h4>
+                            <div class="display-2"><?php echo $item->getData('description'); ?></div>
+
+                        </div>
+                        <?php $videoLink = $item->getData('video_link'); ?>
+                        <?php if(!empty($videoLink)): ?>
+                            <!--insert code here-->
+                            <div class="video-holder">
+                                <iframe src="https://www.youtube.com/embed/<?php echo $videoLink; ?>?showinfo=0" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <?php //echo $videoLink; ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="swiper-pagination"></div>
+            <span class="go-to-bottom"><span></span></span>
+        </div>
+    <?php else: ?>
+        <div class="default-screen-slider">
+
+        </div>
+    <?php endif; ?>
+</div>
+
+<script type="text/javascript">
+    jQuery(function($){
+        $('.full-screen-slider').swiper({
+            autoplay: window.sliderConfigObj<?php echo $this->getSliderGroupId(); ?>.getAutoPlay(),
+            paginationClickable: true,
+            effect: window.sliderConfigObj<?php echo $this->getSliderGroupId(); ?>.getEffect(),
+            loop: true,
+            speed: window.sliderConfigObj<?php echo $this->getSliderGroupId(); ?>.getAnimateSpeed(),
+            pagination: '.swiper-pagination',
+            autoplayDisableOnInteraction: true
+        });
+    });
+
+</script>
+<?php endif; ?>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <cartrulefix translate="label" module="core">
+            <label>Customer Cart Rule from API</label>
+            <sort_order>100</sort_order>
+        </cartrulefix>
+    </tabs>
+    <sections>
+        <cartrulefix_selection translate="label" module="core">
+            <label>General</label>
+            <tab>cartrulefix</tab>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <cartrulefix_group translate="label" module="core">
+                    <label>API options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <cartrulefix_is_member_url translate="label">
+                            <label>API is_member url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cartrulefix_is_member_url>
+                        <cartrulefix_rule_id translate="label">
+                            <label>Rule Id</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cartrulefix_rule_id>
+                    </fields>
+                </cartrulefix_group>
+            </groups>
+        </cartrulefix_selection>
+    </sections>
+</config>

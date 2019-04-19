@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_catalog_product_new>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>brosolutions/admin/datefilter.js</name><params/><if/></action>
+        </reference>
+    </adminhtml_catalog_product_new>
+
+    <adminhtml_catalog_product_edit>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>brosolutions/admin/datefilter.js</name><params/><if/></action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+
+</layout>

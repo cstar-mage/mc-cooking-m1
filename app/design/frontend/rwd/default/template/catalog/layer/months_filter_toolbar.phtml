@@ -1,0 +1,16 @@
+<?php $clearUrl = $this->getClearUrl();?>
+<?php $months = $this->getAvailableMonths(); ?>
+<?php $currentMonth = $this->getMonth(); ?>
+<?php if(count($months)): ?>
+    <ul>
+        <?php foreach($months as $month): ?>
+            <?php if($currentMonth != $month):?>
+                <a href="<?php echo $this->getFilterMonthUrl($month);?>">
+            <?php endif; ?>
+                <li><?php echo $this->getMonthNameByNum($month); ?></li>
+            <?php if($currentMonth != $month):?>
+                </a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

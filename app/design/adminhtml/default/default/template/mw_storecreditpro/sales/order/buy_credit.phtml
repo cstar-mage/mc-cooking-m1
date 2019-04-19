@@ -1,0 +1,20 @@
+<?php
+
+$_order  = $this->getOrder();
+$_source = $this->getSource();
+$this->setPriceDataObject($_source); 
+
+$store_id = Mage::getModel('sales/order')->load($_order->getId())->getStoreId();
+$buy_credit = Mage::helper('core')->currency($_order->getMwStorecreditBuyCredit(),false,false);
+
+
+if($buy_credit > 0){ ?>
+<tr>
+    <td class="label">
+        <?php echo Mage::helper('storecreditpro')->__('Earn credit'); ?>
+    </td>
+    <td><?php echo Mage::helper('storecreditpro')->formatCredit($buy_credit)?></td>
+</tr>
+<?php };
+?>
+

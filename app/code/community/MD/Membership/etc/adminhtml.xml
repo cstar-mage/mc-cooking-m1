@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+-->
+<config>
+    <menu>
+        <md_membership translate="title" module="md_membership">
+            <title>Membership</title>
+            <sort_order>1000</sort_order>
+            <children>
+                <membership_plans translate="title" module="md_membership">
+                    <title>Membership Plans</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/mdmembership_index/index</action>
+                </membership_plans>
+                <membership_subscribers translate="title" module="md_membership">
+                    <title>Membership Subscribers</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/mdmembership_subscribers/index</action>
+                </membership_subscribers>
+            </children>
+        </md_membership>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <md_membership translate="title" module="md_membership">
+                        <title>Membership</title>
+                        <sort_order>1000</sort_order>
+                        <children>
+                            <membership_plans translate="title" module="md_membership">
+                                <title>Membership Plans</title>
+                                <sort_order>1</sort_order>
+                            </membership_plans>
+                            <membership_subscribers translate="title" module="md_membership">
+                                <title>Membership Subscribers</title>
+                                <sort_order>2</sort_order>
+                            </membership_subscribers>
+                        </children>
+                    </md_membership>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <md_membership translate="title" module="md_membership">
+                                        <title>Membership Configuration Section</title>
+                                        <sort_order>100</sort_order>
+                                    </md_membership>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

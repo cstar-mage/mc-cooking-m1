@@ -1,0 +1,402 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MW_Storecreditpro>
+            <version>1.0.5</version>
+        </MW_Storecreditpro>
+    </modules>
+    <frontend>
+    	<secure_url>
+            <storecreditpro>/storecreditpro/index/</storecreditpro>
+			<storecreditpro_checkout_cart>/storecreditpro/checkout_cart/</storecreditpro_checkout_cart>
+        </secure_url>
+        <routers>
+            <storecreditpro>
+                <use>standard</use>
+                <args>
+                    <module>MW_Storecreditpro</module>
+                    <frontName>storecreditpro</frontName>
+                </args>
+            </storecreditpro>
+        </routers>
+        <layout>
+            <updates>
+                <storecreditpro>
+                    <file>mw_storecreditpro.xml</file>
+                </storecreditpro>
+            </updates>
+        </layout>
+		
+		<translate>
+            <modules>
+                <MW_Storecreditpro>
+                    <files>
+                        <default>MW_StorecreditFrontend.csv</default>
+                    </files>
+                </MW_Storecreditpro>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <storecreditpro before="Mage_Adminhtml">MW_Storecreditpro_Adminhtml</storecreditpro>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+		<menu>
+			<customer module="customer">
+    	    	<children>
+    	    		<storecreditpro module="storecreditpro">
+						<title>Manage Credit</title>
+						<sort_order>6</sort_order>               
+						<children>
+		    	    		<member module="storecreditpro">
+								<title>Customer Accounts</title>
+								<sort_order>1</sort_order>      
+								<action>adminhtml/storecreditpro_member</action>         
+							</member>
+							<history module="storecreditpro">
+								<title>All Transaction History</title>
+								<sort_order>2</sort_order>      
+								<action>adminhtml/storecreditpro_transaction</action>         
+							</history>
+							<configuration module="storecreditpro">
+								<title>Configuration</title>
+								<sort_order>3</sort_order>
+								<action>adminhtml/system_config/edit/section/storecreditpro</action>
+							</configuration>
+						</children>
+					</storecreditpro>
+    	    	</children>
+    	    </customer>
+		</menu>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin>
+					<children>
+						<customer module="customer">
+			    	    	<children>
+			    	    		<storecreditpro module="storecreditpro">
+									<title>Manage Credit</title>
+									<sort_order>6</sort_order>               
+									<children>
+					    	    		<member module="storecreditpro">
+											<title>Customer Accounts</title>
+											<sort_order>1</sort_order>      
+											<action>adminhtml/storecreditpro_member</action>         
+										</member>
+										<history module="storecreditpro">
+											<title>All Transaction History</title>
+											<sort_order>2</sort_order>      
+											<action>adminhtml/storecreditpro_transaction</action>         
+										</history>
+										<configuration module="storecreditpro">
+											<title>Configuration</title>
+											<sort_order>3</sort_order>
+											<action>adminhtml/system_config/edit/section/storecreditpro</action>
+										</configuration>
+									</children>
+								</storecreditpro>
+			    	    	</children>
+			    	    </customer>
+						<system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <storecreditpro translate="title" module="storecreditpro">
+                                            <title>Store Credit Pro</title>
+                                        </storecreditpro>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+		<layout>
+			<updates>
+				<storecreditpro>
+					<file>mw_storecreditpro.xml</file>
+				</storecreditpro>
+			</updates>
+		</layout>
+		
+		<translate>
+            <modules>
+                <MW_Storecreditpro>
+                    <files>
+                        <default>MW_StorecreditBackend.csv</default>
+                    </files>
+                </MW_Storecreditpro>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+    	<fieldsets>
+            <sales_convert_quote_address>
+            
+                <mw_storecredit>
+                    <to_order>*</to_order>
+                </mw_storecredit>
+                
+                <mw_storecredit_buy_credit>
+                	<to_order>*</to_order>
+                </mw_storecredit_buy_credit>
+                
+                <mw_storecredit_discount>
+                    <to_order>*</to_order>
+                </mw_storecredit_discount>
+                
+                <mw_storecredit_discount_show>
+                    <to_order>*</to_order>
+                </mw_storecredit_discount_show>
+                
+            </sales_convert_quote_address>
+        </fieldsets>
+        
+        <events>
+        	<sales_quote_collect_totals_before>
+                <observers>
+                    <storecreditpro>
+                        <type>singleton</type>
+                        <class>storecreditpro/quote</class>
+                        <method>collectTotalBefore</method>
+                    </storecreditpro>
+                </observers>
+            </sales_quote_collect_totals_before> 
+        	<adminhtml_customer_save_after>
+                <observers>
+                    <storecreditpro_admin_credit>
+                        <class>storecreditpro/obsever</class>
+                        <method>saveCredits</method>
+                    </storecreditpro_admin_credit>
+                </observers>
+            </adminhtml_customer_save_after>
+            <checkout_cart_product_add_after>
+	            <observers>
+	                <storecreditpro>
+	                    <type>singleton</type>
+	                    <class>storecreditpro/obsever</class>
+	                    <method>checkoutCartProductAddAfter</method>
+	                </storecreditpro>
+            	</observers>
+           </checkout_cart_product_add_after>
+           <sales_convert_quote_item_to_order_item>
+	            <observers>
+	                <storecreditpro>
+	                    <type>singleton</type>
+	                    <class>storecreditpro/obsever</class>
+	                    <method>salesConvertQuoteItemToOrderItem</method>
+	                </storecreditpro>
+	            </observers>
+            </sales_convert_quote_item_to_order_item>
+            <!--  submit ifomation form reward admin -->
+			<adminhtml_sales_order_create_process_data>
+                <observers>
+                    <storecreditpro>
+                        <class>storecreditpro/obsever</class>
+                        <method>processOrderCreationData</method>
+                    </storecreditpro>
+                </observers>
+            </adminhtml_sales_order_create_process_data>
+            <!-- update credit when send credit a friend (khi login) -->
+            <customer_customer_authenticated>
+                <observers>
+                    <storecreditpro>
+                        <type>singleton</type>
+                        <class>storecreditpro/sendcredit</class>
+                        <method>updateWhenLogin</method>
+                    </storecreditpro>
+                </observers>
+            </customer_customer_authenticated>
+            <!-- update credit when send credit a friend (khi register) -->
+            <customer_register_success>
+            	<observers>
+                    <storecreditpro>
+                        <type>singleton</type>
+                        <class>storecreditpro/sendcredit</class>
+                        <method>updateWhenRegister</method>
+                    </storecreditpro>
+                </observers>
+            </customer_register_success>
+            
+            <sales_order_place_after>
+				 <observers>
+                    <storecreditpro>
+                        <type>singleton</type>
+                        <class>storecreditpro/checkout</class>
+                        <method>placeAfter</method>
+                    </storecreditpro>
+                </observers>
+			</sales_order_place_after>
+			
+			<sales_order_save_after>
+            	<observers>
+                    <storecreditpro>
+                        <type>singleton</type>
+                        <class>storecreditpro/checkout</class>
+                        <method>orderSaveAfter</method>
+                    </storecreditpro>
+                </observers>
+            </sales_order_save_after>
+            <adminhtml_sales_order_creditmemo_register_before>
+                <observers>
+                    <storecreditpro>
+                        <class>storecreditpro/obsever</class>
+                        <method>setCheckCreditToRefund</method>
+                    </storecreditpro>
+                </observers>
+            </adminhtml_sales_order_creditmemo_register_before>
+            
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <storecreditpro>
+                        <class>storecreditpro/obsever</class>
+                        <method>refundCreditOrder</method>
+                    </storecreditpro>
+                </observers>
+            </sales_order_creditmemo_save_after>
+			 <controller_front_init_before>
+            	<observers>
+					<storecreditpro>
+                        <class>storecreditpro/obsever</class>
+                        <method>checkLicense</method>
+                    </storecreditpro>                    
+                </observers>
+			</controller_front_init_before>
+            
+        </events> 
+        
+        <models>
+            <storecreditpro>
+                <class>MW_Storecreditpro_Model</class>
+                <resourceModel>storecreditpro_mysql4</resourceModel>
+            </storecreditpro>
+            <storecreditpro_mysql4>
+                <class>MW_Storecreditpro_Model_Mysql4</class>
+                <entities>
+                    <customer>
+                        <table>mw_storecredit_customer</table>
+                    </customer>
+                    <history>
+                        <table>mw_storecredit_history</table>
+                    </history>
+                </entities>
+            </storecreditpro_mysql4>
+        </models>
+        <resources>
+            <storecreditpro_setup>
+                <setup>
+                    <module>MW_Storecreditpro</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </storecreditpro_setup>
+            <storecreditpro_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </storecreditpro_write>
+            <storecreditpro_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </storecreditpro_read>
+        </resources>
+        <blocks>
+            <storecreditpro>
+                <class>MW_Storecreditpro_Block</class>
+            </storecreditpro>
+        </blocks>
+        <helpers>
+            <storecreditpro>
+                <class>MW_Storecreditpro_Helper</class>
+            </storecreditpro>
+        </helpers>
+        <template>
+		  <email>
+		  	<storecreditpro_email_notifications_credit_balance translate="label" module="storecreditpro">
+			      <label>Balance update email</label>
+			      <file>mw_storecreditpro/mw_storecredit_balance_changed.html</file>
+			      <type>html</type>
+		     </storecreditpro_email_notifications_credit_balance>
+		     <storecreditpro_email_notifications_recipient_template translate="label" module="storecreditpro">
+			      <label>Sending Credits email</label>
+			      <file>mw_storecreditpro/mw_storecredit_sending_credits.html</file>
+			      <type>html</type>
+		     </storecreditpro_email_notifications_recipient_template>
+		  </email>
+		</template>
+        <sales>
+            <quote>
+                <totals>
+                    <mw_storecredit>
+                        <class>storecreditpro/quote_address_total_storecredit</class>
+                        <after>weee,discount,reward_points,tax,tax_subtotal,grand_total</after>
+                       <!-- <renderer>storecredit/checkout_total</renderer> --> 
+                    </mw_storecredit>
+                </totals>
+            </quote>
+            <order_invoice>
+            	<totals>
+                    <mw_storecredit>
+                        <class>storecreditpro/order_invoice_total_storecredit</class>
+                        <after>grand_total</after>
+                    </mw_storecredit>
+            	</totals>
+            </order_invoice>
+            <order_creditmemo>
+                <totals>
+                    <mw_storecredit>
+                        <class>storecreditpro/order_creditmemo_total_storecredit</class>
+                        <after>weee,discount,tax,grand_total</after>
+                    </mw_storecredit>
+                </totals>
+            </order_creditmemo>
+    	</sales>
+    	<pdf>
+    		<totals>
+                <mw_storecredit_discount translate="title">
+                    <title>Storecredit Discount</title>
+                    <source_field>mw_storecredit_discount</source_field>
+                    <amount_prefix>-</amount_prefix>
+                    <font_size>7</font_size>
+                    <display_zero>0</display_zero>
+                    <sort_order>201</sort_order>
+                    <model>storecreditpro/order_pdf_total_storecredit</model>
+                </mw_storecredit_discount>
+            </totals>
+    	</pdf>
+    </global>
+    <default>
+    	<storecreditpro>
+    		<config>
+    			<enabled>1</enabled>
+    			<redeemed_tax>0</redeemed_tax>
+    			<redeemed_shipping>0</redeemed_shipping>
+    			<min_checkout>0</min_checkout>
+    			<max_checkout>0</max_checkout>
+    			<restore_spent_credit>1</restore_spent_credit>
+    			<subtract_earn_credit>1</subtract_earn_credit>
+    		</config>
+    		<email_notifications>
+    			<enable_notifications>1</enable_notifications>
+    			<email_sender>general</email_sender>
+    			<credit_balance>storecreditpro_email_notifications_credit_balance</credit_balance>
+    			<recipient_template>storecreditpro_email_notifications_recipient_template</recipient_template>
+    		</email_notifications>
+    	</storecreditpro>
+    	
+    </default>
+</config>

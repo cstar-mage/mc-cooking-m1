@@ -1,0 +1,89 @@
+<?php
+/**
+* Magedelight
+* Copyright (C) 2015 Magedelight <info@magedelight.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* @category MD
+* @package MD_Membership
+* @copyright Copyright (c) 2015 Mage Delight (http://www.magedelight.com/)
+* @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+* @author Magedelight <info@magedelight.com>
+*/
+$helper = Mage::helper('md_membership');
+$coreHelper = Mage::helper('core');
+$membershipPlans = $this->getSubscribedPlans();
+$_plansLabels = array(
+    MD_Membership_Model_Plans::BILLING_PERIOD_DAILY =>$helper->__('Daily'),
+    MD_Membership_Model_Plans::BILLING_PERIOD_MONTHLY =>$helper->__('Monthly'),
+    MD_Membership_Model_Plans::BILLING_PERIOD_WEEKLY =>$helper->__('Weekly'),
+    MD_Membership_Model_Plans::BILLING_PERIOD_QUARTERLY =>$helper->__('Quarterly'),
+    MD_Membership_Model_Plans::BILLING_PERIOD_BIMONTHLY =>$helper->__('Bi Monthly'),
+    MD_Membership_Model_Plans::BILLING_PERIOD_YEARLY =>$helper->__('Yearly'),
+);
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title">
+    <h1><?php echo $helper->__('My Subscribed Membership Plans') ?></h1>
+</div>
+<?php if($membershipPlans->getSize()): ?>
+<?php echo $this->getPagerHtml(); ?>
+<table class="data-table subscriptions" id="my-subscriptions-table">
+    <col width="1" />
+    <col width="1" />
+    <col width="1"/>
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th class="number"><?php echo $helper->__('Reference #') ?></th>
+            <th class="total"><span class="nobr">&nbsp;</span></th>
+            <th class="total"><span class="nobr"><?php echo $helper->__('Plan') ?></span></th>
+            <th class="number"><span class="nobr"><?php echo $helper->__('Initial Fee') ?></span></th>
+            <th class="number"><span class="nobr"><?php echo $helper->__('Type') ?></span></th>
+            <th class="number"><span class="nobr"><?php echo $helper->__('Price') ?></span></th>
+            <th class="number"><span class="nobr"><?php echo $helper->__('Cycles') ?></span></th>
+            <th class="date"><span class="nobr"><?php echo $helper->__('Trial Price') ?></span></th>
+            <!--<th class="date"><span class="nobr"><?php echo $helper->__('Trial Cycles') ?></span></th>-->
+            <th class="view">&nbsp;</th>
+        </tr>
+        <tbody>
+            <?php foreach($membershipPlans as $_subscription): ?>
+            <?php $_plan = $_subscription->getPlan() ?>
+            <tr>
+                <td class="number"><?php echo $_subscription->getReferenceId() ?></td>
+                <td class="number"><img src="<?php echo $_plan->getImageUrl() ?>" height="50px" width="50px" /></td>
+                <td class="number"><?php echo $_plan->getTitle(); ?></td>
+                <td class="a-center"><?php echo $coreHelper->formatPrice($_plan->getInitialAmount(),true,false) ?></td>
+                <td class="a-center"><?php echo $_plansLabels[$_plan->getBillingPeriod()] ?></td>
+                <td class="a-center"><?php echo $coreHelper->formatPrice($_plan->getAmount(),true,false) ?></td>
+                <td class="a-center number"><?php echo $_plan->getTotalOccurences() ?></td>
+                <td class="a-center"><?php echo $coreHelper->formatPrice($_plan->getTrialAmount(),true,false) ?></td>
+                <!--<td class="a-center number"><?php echo $_plan->getTrialPeriodCount() ?></td>-->
+                <td class="a-center view"><span class="nobr"><a href="<?php echo $this->getViewUrl($_subscription) ?>"><?php echo $helper->__('View Details') ?></a></span></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </thead>
+</table>
+<?php else: ?>
+<p><?php echo $helper->__('You are not subscribed to any membership plans.') ?></p>
+<?php endif; ?>

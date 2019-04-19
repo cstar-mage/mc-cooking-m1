@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Aitoc_Aitexporter>
+            <active>true</active>
+            <codePool>local</codePool>
+            <self_name>Orders Export and Import</self_name>
+            <priority>1001</priority>
+            <depends>
+                
+            </depends>
+        </Aitoc_Aitexporter>
+    </modules>
+</config>
+<!--
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+-->

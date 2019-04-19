@@ -1,0 +1,18 @@
+
+<script type="text/javascript">
+//<![CDATA[
+    function removeMwStorecredit(code) {
+        var data = {};
+        data['mw_storecredit_remove'] = code;
+        order.loadArea(['totals', 'billing_method', 'items'], true, data);
+    };
+
+    function applyMwStorecredit() {
+        var code = $('mw_storecredit_add_input').value;
+        var data = {};
+        data['mw_storecredit_add_input'] = code;
+        order.loadArea(['totals', 'billing_method', 'items'], true, data);
+    };
+	
+//]]>
+</script>

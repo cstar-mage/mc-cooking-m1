@@ -1,0 +1,185 @@
+<?php
+/**
+ * Orders Export and Import
+ *
+ * @category:    Aitoc
+ * @package:     Aitoc_Aitexporter
+ * @version      1.2.11
+ * @license:     xwB5BO6b8ADSZdWMZBvj82HAnNdHAZvfJuyG2JiSFP
+ * @copyright:   Copyright (c) 2015 AITOC, Inc. (http://www.aitoc.com)
+ */
+$_config = $this->getConfig() ?>
+<script type="text/javascript">
+//<![CDATA[
+function checkAll(element)
+{
+    if(element.checked)
+    {
+        $elements = $$('.entity_type_checkbox').each(check);
+    }
+    else
+    {
+        $elements = $$('.entity_type_checkbox').each(uncheck);
+    }
+}
+function check(checkbox)
+{
+    checkbox.checked = true;
+}
+function uncheck(checkbox)
+{
+    checkbox.checked = false;
+}
+//]]>
+</script>
+<div id="profile-generator" class="entry-edit profile-generator">
+    <fieldset>
+        <span class="field-row">
+            <label for="check"><?php echo Mage::helper('aitexporter')->__('Select All/Unselect All') ?></label>
+            <span>
+                <input type="checkbox" id="check" name="check" value="1" onclick="checkAll(this)" />
+            </span>
+        </span>
+    </fieldset>
+    
+    <div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('aitexporter')->__('Orders') ?></h4>
+    </div>
+    <fieldset>
+        <legend><?php echo Mage::helper('aitexporter')->__('Orders') ?></legend>
+        <span class="field-row">
+            <label for="orderItem"><?php echo Mage::helper('aitexporter')->__('Order Items') ?></label>
+            <span>
+                <input type="checkbox" id="orderItem" class="entity_type_checkbox" name="entity_type[order_item]" value="1" <?php echo $this->getChecked('entity_type/order_item') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="orderAddress"><?php echo Mage::helper('aitexporter')->__('Order Addresses') ?></label>
+            <span>
+                <input type="checkbox" id="orderAddress" class="entity_type_checkbox" name="entity_type[order_address]" value="1" <?php echo $this->getChecked('entity_type/order_address') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="orderPayment"><?php echo Mage::helper('aitexporter')->__('Order Payments') ?></label>
+            <span>
+                <input type="checkbox" id="orderPayment" class="entity_type_checkbox" name="entity_type[order_payment][order_payment]" value="1" <?php echo $this->getChecked('entity_type/order_payment/order_payment') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="orderPaymentTransaction"><?php echo Mage::helper('aitexporter')->__('Order Payment Transactions') ?></label>
+            <span>
+                <input type="checkbox" id="orderPaymentTransaction" class="entity_type_checkbox" name="entity_type[order_payment][order_payment_transaction]" value="1" <?php 
+                echo $this->getChecked('entity_type/order_payment/order_payment_transaction') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="orderStatushistory"><?php echo Mage::helper('aitexporter')->__('Order Status History') ?></label>
+            <span>
+                <input type="checkbox" id="orderStatushistory" class="entity_type_checkbox" name="entity_type[order_statushistory]" value="1" <?php echo $this->getChecked('entity_type/order_statushistory') ?> />
+            </span>
+        </span>
+    </fieldset>
+
+    <div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('aitexporter')->__('Invoices') ?></h4>
+    </div>
+    <fieldset>
+        <legend><?php echo Mage::helper('aitexporter')->__('Invoices') ?></legend>
+        <span class="field-row">
+            <label for="invoice"><?php echo Mage::helper('aitexporter')->__('Invoices') ?></label>
+            <span>
+                <input type="checkbox" id="invoice" class="entity_type_checkbox" name="entity_type[invoice][invoice]" value="1" <?php echo $this->getChecked('entity_type/invoice/invoice') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="invoiceComment"><?php echo Mage::helper('aitexporter')->__('Invoice Comments') ?></label>
+            <span>
+                <input type="checkbox" id="invoiceComment" class="entity_type_checkbox" name="entity_type[invoice][invoice_comment]" value="1" <?php echo $this->getChecked('entity_type/invoice/invoice_comment') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="invoiceItem"><?php echo Mage::helper('aitexporter')->__('Invoice Items') ?></label>
+            <span>
+                <input type="checkbox" id="invoiceItem" class="entity_type_checkbox" name="entity_type[invoice][invoice_item]" value="1" <?php echo $this->getChecked('entity_type/invoice/invoice_item') ?> />
+            </span>
+        </span>
+    </fieldset>
+
+    <div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('aitexporter')->__('Shipments') ?></h4>
+    </div>
+    <fieldset>
+        <span class="field-row">
+            <label for="shipment"><?php echo Mage::helper('aitexporter')->__('Shipments') ?></label>
+            <span>
+                <input type="checkbox" id="shipment" class="entity_type_checkbox" name="entity_type[shipment][shipment]" value="1" <?php echo $this->getChecked('entity_type/shipment/shipment') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="shipmentComment"><?php echo Mage::helper('aitexporter')->__('Shipment Comments') ?></label>
+            <span>
+                <input type="checkbox" id="shipmentComment" class="entity_type_checkbox" name="entity_type[shipment][shipment_comment]" value="1" <?php echo $this->getChecked('entity_type/shipment/shipment_comment') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="shipmentItem"><?php echo Mage::helper('aitexporter')->__('Shipped Items') ?></label>
+            <span>
+                <input type="checkbox" id="shipmentItem" class="entity_type_checkbox" name="entity_type[shipment][shipment_item]" value="1" <?php echo $this->getChecked('entity_type/shipment/shipment_item') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="shipmentTracking"><?php echo Mage::helper('aitexporter')->__('Shipments Tracking Information') ?></label>
+            <span>
+                <input type="checkbox" id="shipmentTracking" class="entity_type_checkbox" name="entity_type[shipment][shipment_tracking]" value="1" <?php echo $this->getChecked('entity_type/shipment/shipment_tracking') ?> />
+            </span>
+        </span>
+    </fieldset>
+
+    <div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('aitexporter')->__('Credit Memos') ?></h4>
+    </div>
+    <fieldset>
+        <span class="field-row">
+            <label for="creditmemo"><?php echo Mage::helper('aitexporter')->__('Credit Memos') ?></label>
+            <span>
+                <input type="checkbox" id="creditmemo" class="entity_type_checkbox" name="entity_type[creditmemo][creditmemo]" value="1" <?php echo $this->getChecked('entity_type/creditmemo/creditmemo') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="creditmemoComment"><?php echo Mage::helper('aitexporter')->__('Credit Memo Comments') ?></label>
+            <span>
+                <input type="checkbox" id="creditmemoComment" class="entity_type_checkbox" name="entity_type[creditmemo][creditmemo_comment]" value="1" <?php echo $this->getChecked('entity_type/creditmemo/creditmemo_comment') ?> />
+            </span>
+        </span>
+        <span class="field-row">
+            <label for="creditmemoItem"><?php echo Mage::helper('aitexporter')->__('Credit Memo Items') ?></label>
+            <span>
+                <input type="checkbox" id="creditmemoItem" class="entity_type_checkbox" name="entity_type[creditmemo][creditmemo_item]" value="1" <?php echo $this->getChecked('entity_type/creditmemo/creditmemo_item') ?> />
+            </span>
+        </span>
+    </fieldset>
+    
+    <?php if(Mage::helper('aitexporter/aitcheckoutfields')->isEnabled()) : ?>
+    <div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('aitexporter')->__('Checkout fields') ?></h4>
+    </div>
+    <fieldset>
+        <?php    
+        //$checkoutAttributesCollection = Mage::getModel('aitcheckoutfields/aitcheckoutfields')->getAttributeCollecton();
+        $checkoutAttributesCollection = Mage::getModel('aitexporter/export_type_aitcheckoutfields')->getCFMFields();
+        
+        foreach($checkoutAttributesCollection as $checkoutAttribute)
+        {
+            ?>
+        <span class="field-row">
+            <label for="<?php echo 'checkoutFields' . ucfirst($checkoutAttribute->getAttributeCode()) ?>"><?php echo Mage::helper('aitexporter')->__($checkoutAttribute->getFrontendLabel()) ?></label>
+            <span>
+                <input type="checkbox" id="<?php echo 'checkoutFields' . ucfirst($checkoutAttribute->getAttributeCode()) ?>" class="entity_type_checkbox" 
+                   name="entity_type[aitcheckoutfields][<?php echo $checkoutAttribute->getAttributeCode()?>]" value="1" <?php echo $this->getChecked('entity_type/aitcheckoutfields/' . $checkoutAttribute->getAttributeCode()) ?> />
+            </span>
+        </span>
+        <?php
+        }?>
+        </fieldset>
+    <?php endif ?>
+</div>
